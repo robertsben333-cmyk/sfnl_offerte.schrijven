@@ -1,0 +1,10 @@
+# Generated proposals — per-client output, not source
+output/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Local Claude settings
+.claude/settings.local.json

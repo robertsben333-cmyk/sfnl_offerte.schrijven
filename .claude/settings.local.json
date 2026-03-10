@@ -1,8 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(python3:*)",
-      "Bash(unzip -l \"C:\\\\Users\\\\XavierFriesen\\\\Downloads\\\\offertes_business_case\\\\Offerte Businesscase Hartstichting Postmortale diagnostiek - Social Finance NL.pptx\")"
-    ]
-  }
-}

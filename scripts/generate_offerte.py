@@ -16,28 +16,7 @@ import lxml.etree as etree
 from pptx import Presentation
 from pptx.oxml.ns import nsmap
 
-def _resolve_template() -> Path:
-    """
-    Find the proposal template. Checks in order:
-    1. Relative to this script (standard project layout after install.py)
-    2. Sibling 'templates' folder next to install.py if run from project root
-    3. ~/.projects SFNL/sfnl_offerte.schrijven/templates/ (install.py default)
-    Raises FileNotFoundError with setup instructions if not found.
-    """
-    candidates = [
-        Path(__file__).parent.parent / "templates" / "offerte_mbc_template.pptx",
-        Path.home() / ".projects SFNL" / "sfnl_offerte.schrijven" / "templates" / "offerte_mbc_template.pptx",
-    ]
-    for p in candidates:
-        if p.exists():
-            return p
-    raise FileNotFoundError(
-        "Template niet gevonden. Voer de setup eenmalig uit:\n"
-        "  py install.py --template \"pad/naar/offerte_mbc_template.pptx\"\n\n"
-        "Gezocht op:\n" + "\n".join(f"  {p}" for p in candidates)
-    )
-
-TEMPLATE_PATH = _resolve_template()
+TEMPLATE_PATH = Path(__file__).parent.parent / "templates" / "offerte_mbc_template.pptx"
 
 # Slide indices (0-based) — valid BEFORE any extra slides are inserted
 SLIDE_COVER         = 0
