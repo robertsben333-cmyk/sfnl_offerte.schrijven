@@ -1,0 +1,19 @@
+{
+  "name": "sfnl-plugins",
+  "description": "Claude plugins voor Social Finance NL",
+  "owner": {
+    "name": "Social Finance NL",
+    "email": "info@socialfinancenl.nl"
+  },
+  "plugins": [
+    {
+      "name": "sfnl-offerte",
+      "description": "Schrijft SFNL offertes voor maatschappelijke businesscases en duurzame financiering",
+      "version": "1.0.0",
+      "source": "./",
+      "author": {
+        "name": "Social Finance NL"
+      }
+    }
+  ]
+}
