@@ -9,25 +9,14 @@ description: >
 
 # SFNL Offerte Skill — Maatschappelijke Businesscase
 
-## Setup voor nieuwe gebruikers
-Eenmalig uitvoeren na het uitpakken van de plugin-zip:
-```bash
-py install.py
-# of, als de template PPTX ergens op je schijf staat:
-py install.py --template "pad/naar/offerte_mbc_template.pptx"
-```
-Dit installeert python-pptx, kopieert de SKILL naar `~/.claude/skills/sfnl-offerte/` en zet de projectbestanden klaar in `~/.projects SFNL/sfnl_offerte.schrijven/`. De template kun je opvragen bij een collega of via SharePoint.
-
----
-
 ## Project files
-Alle skill-assets staan in: `~/.projects SFNL/sfnl_offerte.schrijven/`
-(op Windows: `%USERPROFILE%\.projects SFNL\sfnl_offerte.schrijven\`)
+All skill assets are bundled with this plugin at `${CLAUDE_PLUGIN_ROOT}`:
 
-- **Template**: `templates\offerte_mbc_template.pptx`
-- **Team data**: `data\team.json`
-- **Generator**: `scripts\generate_offerte.py`
-- **Output**: ask user for output folder; default to `output\`
+- **Template**: `${CLAUDE_PLUGIN_ROOT}/templates/offerte_mbc_template.pptx`
+- **Team data**: `${CLAUDE_PLUGIN_ROOT}/data/team.json`
+- **Generator**: `${CLAUDE_PLUGIN_ROOT}/scripts/generate_offerte.py`
+- **Reviewer**: `${CLAUDE_PLUGIN_ROOT}/scripts/review_offerte.py`
+- **Output**: ask user for output folder; default to current working directory
 
 ## Workflow overview
 
@@ -147,7 +136,7 @@ The phrase to use in the offerte (inside the fase 1 description):
 For a range: `"Binnen het huidige budget werken we 8 tot 10 outcomes financieel uit; bij een verruimd budget kunnen we dit uitbreiden naar 12 outcomes."`
 
 ### Team
-Read `data/team.json`. Based on the project type and client, suggest:
+Read `${CLAUDE_PLUGIN_ROOT}/data/team.json`. Based on the project type and client, suggest:
 - 1 supervisor from: Els, Björn, Ruben, Laura, Michalli
 - 1 project manager from: managers list
 - 1-2 associates/analysts
@@ -176,7 +165,7 @@ Show all numbers clearly so user can confirm.
 Once all 3 steps are confirmed, build the config JSON and run the generator.
 
 ### 1. Build the config file
-Save to: `output/config_[klant_slug]_[YYYYMMDD].json`
+Ask the user where to save the output if not specified. Save config alongside the PPTX.
 
 Config structure:
 ```json
@@ -205,15 +194,14 @@ Config structure:
         "doel": "...",
         "aanpak": "...",
         "acties_sfnl": ["Deskresearch", "Kick-off meeting organiseren", "..."],
-        "betrokken_partijen": "...",
         "acties_klant": ["Documentatie aanleveren", "Deelname interviews", "..."],
         "deliverable": "Verandertheorie, effectenkaart en geselecteerde outcomes",
         "dagen": 8,
         "tijdlijn": "november - december 2025",
         "outcomes_note": "Binnen het huidige budget werken we 9 outcomes financieel uit."
       },
-      { "number": 2, "name": "MAATSCHAPPELIJKE BUSINESSCASE", ... },
-      { "number": 3, "name": "ADVIES DUURZAME FINANCIERING EN COMMUNICATIE", ... }
+      { "number": 2, "name": "MAATSCHAPPELIJKE BUSINESSCASE", "...": "..." },
+      { "number": 3, "name": "ADVIES DUURZAME FINANCIERING EN COMMUNICATIE", "...": "..." }
     ]
   },
 
@@ -249,18 +237,17 @@ Config structure:
 
 ### 2. Run the generator
 ```bash
-py "%USERPROFILE%/.projects SFNL/sfnl_offerte.schrijven/scripts/generate_offerte.py" \
-   "%USERPROFILE%/.projects SFNL/sfnl_offerte.schrijven/output/config_[slug].json" \
+py "${CLAUDE_PLUGIN_ROOT}/scripts/generate_offerte.py" \
+   "config_[slug].json" \
    "[OUTPUT_PATH]/[YYYYMMDD] Offerte [Klant] SFNL.pptx"
 ```
-
-Ask the user where to save the output if they haven't specified. Default to `output\` inside the project folder.
 
 **Extra fases (4+)**: If there are more than 3 fases, the generator prints a notice but does NOT insert them automatically — the overview slide (slide 6) only has 3 chevrons, so mechanical insertion would create a visual inconsistency. Handle extra fases as an explicit step after generation:
 1. First check: does fase 4 warrant its own slide, or can it be integrated into fase 3's text?
 2. If it needs a slide, use `insert_extra_fase()` from the module:
 ```python
-from scripts.generate_offerte import Presentation, insert_extra_fase
+from pathlib import Path; import sys; sys.path.insert(0, "${CLAUDE_PLUGIN_ROOT}/scripts")
+from generate_offerte import Presentation, insert_extra_fase
 prs = Presentation("output/[file].pptx")
 insert_extra_fase(prs, cfg["aanpak"]["fases"][3], "[client_name]", extra_count=0)
 prs.save("output/[file].pptx")
@@ -275,7 +262,7 @@ After generation, launch a **general-purpose sub-agent** to review the output. T
 
 ### 1. Run the deterministic review script
 ```bash
-py "%USERPROFILE%/.projects SFNL/sfnl_offerte.schrijven/scripts/review_offerte.py" \
+py "${CLAUDE_PLUGIN_ROOT}/scripts/review_offerte.py" \
    "[output_pptx_path]" \
    "[config_json_path]"
 ```
@@ -308,8 +295,6 @@ Based on the client context, flag any slides worth adding manually:
 - An optional fase 4 slide if a financial business plan was discussed
 
 ### 4. Return a structured report
-The sub-agent should return a report in this format:
-
 ```
 SFNL REVIEW RAPPORT — [klant naam]
 
