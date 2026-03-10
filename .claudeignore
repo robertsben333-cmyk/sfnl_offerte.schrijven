@@ -1,0 +1,11 @@
+# Binary files — Claude can't read these; exclude to stay within size limits
+*.pptx
+*.ppt
+*.pdf
+
+# Generated output — runtime files, not source
+output/
+
+# Python cache
+__pycache__/
+*.pyc
