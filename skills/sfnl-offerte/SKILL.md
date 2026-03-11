@@ -1,32 +1,49 @@
 ---
 name: sfnl-offerte
 description: >
-  Write a Social Finance NL proposal (offerte) for a maatschappelijke businesscase en duurzame
-  financiering project. Trigger when the user types /sfnl-offerte, asks to "schrijf een offerte",
-  "nieuwe offerte", or wants to create a proposal for Social Finance NL's MBC proposition.
-  This skill orchestrates a structured conversation across 3 steps and then generates a PPTX file.
+  Write a Social Finance NL proposal (offerte) for a maatschappelijke businesscase (MBC) en
+  duurzame financiering project. Use this skill whenever the user wants to create, draft, or
+  generate an SFNL proposal or offerte — including when they say "schrijf een offerte",
+  "nieuwe offerte", "maak een offerte", "offerte voor [klant]", "MBC voorstel", or "/sfnl-offerte".
+  Also trigger when a colleague mentions they're preparing a pitch, voorstel, or aanbieding for
+  a new client, or wants to start the offerte process for any organisation. This skill guides the
+  user through a structured 3-step conversation (intake → inhoud → budget/team) and then generates
+  a formatted PPTX proposal file using the SFNL house template.
 ---
 
 # SFNL Offerte Skill — Maatschappelijke Businesscase
 
-## Project files
-All skill assets are bundled with this plugin at `${CLAUDE_PLUGIN_ROOT}`:
+## Setup voor nieuwe gebruikers
+Eenmalig uitvoeren na het uitpakken van de plugin-zip:
+```bash
+py install.py
+# of, als de template PPTX ergens op je schijf staat:
+py install.py --template "pad/naar/offerte_mbc_template.pptx"
+```
+Dit installeert python-pptx, kopieert de SKILL naar `~/.claude/skills/sfnl-offerte/` en zet de projectbestanden klaar in `~/.projects SFNL/sfnl_offerte.schrijven/`. De template kun je opvragen bij een collega of via SharePoint.
 
-- **Template**: `${CLAUDE_PLUGIN_ROOT}/templates/offerte_mbc_template.pptx`
-- **Team data**: `${CLAUDE_PLUGIN_ROOT}/data/team.json`
-- **Generator**: `${CLAUDE_PLUGIN_ROOT}/scripts/generate_offerte.py`
-- **Reviewer**: `${CLAUDE_PLUGIN_ROOT}/scripts/review_offerte.py`
-- **Output**: ask user for output folder; default to current working directory
+---
+
+## Project files
+Alle skill-assets staan in: `~/.projects SFNL/sfnl_offerte.schrijven/`
+(op Windows: `%USERPROFILE%\.projects SFNL\sfnl_offerte.schrijven\`)
+
+- **Template**: `templates\offerte_mbc_template.pptx`
+- **Team data**: `data\team.json`
+- **Review script**: `scripts\review_offerte.py` (budget math, placeholders, forbidden words)
+- **Output**: ask user for output folder; default to `output\`
 
 ## Workflow overview
 
 ```
 STEP 1  →  Ask intake questions (1 message)
 STEP 2a →  Propose: doel, doelgroep, context, aandachtspunten (user confirms/edits)
-STEP 2b →  Propose: fases + dag-schattingen + tijdlijn (user confirms/edits)
-STEP 2c →  Propose: outcomes-tier, team, tarief, budget, betalingsschema (user confirms/edits)
-GENERATE → Build config JSON → run generator → open review
+STEP 2b →  AskUserQuestion: complexity tier → Propose: fases + dag-schattingen + tijdlijn
+STEP 2c →  AskUserQuestion: tarief + team → Propose: outcomes, budget, betalingsschema
+GENERATE → Build config JSON → invoke pptx skill to fill template → review
 ```
+
+**Interactivity rule**: Use the `AskUserQuestion` tool at every key decision point (marked ⬡ below) to present 3 concrete options. Always include an open "Andere keuze / eigen input" option as the fourth. Never assume — always let the user pick before you calculate.
 
 ---
 
@@ -52,14 +69,44 @@ Based on the intake, propose all of the following **in one message**. Present th
 One punchy sentence in ALL CAPS, max 15 words. Pattern: `[INTERVENTIENAAM] [ORGANISATIE]: [KERNBOODSCHAP]`
 Example: `VROUWENSPREEKUUR BIJ AMSTERDAM UMC: INVESTEREN IN TOEGANKELIJKE ZORG MET IMPACT OP GEZONDHEID, WERK EN MAATSCHAPPIJ`
 
-### 2a.2 Maatschappelijk vraagstuk (1 paragraph, 80-120 words)
-Describe the societal problem the intervention addresses. Specific, data-grounded where possible. No fluffy language.
+### 2a.2 Maatschappelijk vraagstuk — use AskUserQuestion with 3 formulations
 
-### 2a.3 Grootste uitdagingen (1 paragraph, 60-100 words)
-What makes this problem hard to solve — fragmented funding, system barriers, attribution, lack of data?
+Write 3 versions of the maatschappelijk vraagstuk paragraph (80-120 words each). The variants should differ meaningfully — not just word-by-word, but in angle or emphasis. For example:
+- **Variant A**: Opens with a striking statistic or concrete scale of the problem
+- **Variant B**: Opens from the perspective of the affected person/doelgroep
+- **Variant C**: Opens with the systemic or structural framing
 
-### 2a.4 Behoefte van de klant (1 paragraph, 80-120 words)
-What does this client specifically want from the businesscase? Link to their strategic goals (intern draagvlak / opschaling / duurzame financiering / combinatie).
+Present all 3 using `AskUserQuestion`:
+- **Header**: `"Maatschappelijk vraagstuk"`
+- **Question**: `"Welke formulering van het maatschappelijk vraagstuk past het best?"`
+- **Option A / B / C**: the three paragraph texts (shown in full as the option description)
+- **Option D**: `"Geen van deze — ik pas zelf aan"`
+
+### 2a.3 Grootste uitdagingen — use AskUserQuestion with 3 formulations
+
+Write 3 versions (60-100 words each) that differ in which barriers they foreground. For example:
+- **Variant A**: Emphasises data/attribution challenges
+- **Variant B**: Emphasises fragmented funding landscape and multiple payers
+- **Variant C**: Emphasises organisational or political barriers to change
+
+Present all 3 using `AskUserQuestion`:
+- **Header**: `"Grootste uitdagingen"`
+- **Question**: `"Welke formulering van de uitdagingen klopt het best?"`
+- **Option A / B / C**: the three texts
+- **Option D**: `"Geen van deze — ik pas zelf aan"`
+
+### 2a.4 Behoefte van de klant — use AskUserQuestion with 3 formulations
+
+Write 3 versions (80-120 words each) that differ in strategic emphasis. For example:
+- **Variant A**: Focuses on intern draagvlak / intern bewijs
+- **Variant B**: Focuses on opschaling en nieuwe financiers aantrekken
+- **Variant C**: Focuses on duurzame bekostiging / continuïteit
+
+Present all 3 using `AskUserQuestion`:
+- **Header**: `"Behoefte van de klant"`
+- **Question**: `"Welke omschrijving van de behoefte sluit het best aan?"`
+- **Option A / B / C**: the three texts
+- **Option D**: `"Geen van deze — ik pas zelf aan"`
 
 ### 2a.5 Doelgroep + stakeholders
 - Primaire doelgroep (who benefits)
@@ -93,15 +140,30 @@ Based on 2a, propose the phase structure **in one message**.
 - Businesscase opstellen en valideren
 
 **Fase 3: Advies duurzame financiering en communicatie**
-- Financieringsopties in kaart brengen
-- Kernboodschappen formuleren
-- Eindrapport + publiekssamenvatting
+- Overzicht van stakeholders met wie het initiatief in gesprek kan gaan (op basis van analyse-uitkomsten)
+- Stakeholdergerichte communicatielijn: kernboodschappen per stakeholder voor de drie belangrijkste stakeholders
+- Presentatieslides per stakeholder (top 3) met communicatielijn
+- Stappenplan om de inzichten van de businesscase in te zetten voor toekomstige financiering
+- **Optioneel: publiekssamenvatting** — dit is een bewuste keuze met bijbehorende extra kosten. Altijd expliciet als aparte optie benoemen met prijskaartje. NIET standaard meenemen — voorkomen dat dit in volgende offertes als vanzelfsprekend wordt opgenomen.
 
 **Deviation rule**: If context clearly calls for a different structure (e.g. a Phase 4 for financial business planning, or a combined Phase 1+2 for a small impact scan), propose the alternative AND explicitly state why you are deviating from the standard. Ask for explicit user confirmation before proceeding.
 
+### ⬡ Complexity tier — use AskUserQuestion BEFORE proposing day estimates
+
+Read the intake notes and form your own recommendation. Then present the choice using `AskUserQuestion`:
+
+- **Header**: `"Complexiteit"`
+- **Question**: `"Op basis van de intake schat ik dit in als [jouw aanbeveling]. Welk complexiteitsniveau kies je?"`
+- **Option A**: `"Basic — 6-8 outcomes · 16-23 werkdagen · ~€24K-34K excl. BTW"`
+- **Option B**: `"Standaard — 9-12 outcomes · 24-32 werkdagen · ~€36K-47K excl. BTW"`
+- **Option C**: `"Complex — 13+ outcomes · 32-44 werkdagen · ~€47K-65K excl. BTW"`
+- **Option D**: `"Andere inschatting (vul zelf in)"`
+
+Mention your recommendation in the question text, e.g. "Op basis van de complexe doelgroep en beperkte data stel ik **Standaard** voor." Use the confirmed tier for all subsequent day estimates.
+
 ### Day estimates by complexity tier
 
-Use the outcomes complexity (determined in step 2c) and these benchmarks from past proposals:
+Use the outcomes complexity (determined above) and these benchmarks from past proposals:
 
 | Tier         | Outcomes | Fase 1  | Fase 2   | Fase 3  | Total    | Budget (@€1.480) |
 |--------------|----------|---------|----------|---------|----------|------------------|
@@ -113,6 +175,7 @@ Use the outcomes complexity (determined in step 2c) and these benchmarks from pa
 - +2-4d: meer dan 3 stakeholdertypen voor financiering (fase 3)
 - +2-3d: beperkte beschikbaarheid van data of complexe attributie (fase 2)
 - +1-2d per extra interviewgroep (bijv. patiënten én werkgevers én gemeente)
+- +2-3d: persona-methodiek voor diverse doelgroep (fase 1-2) — altijd voorstellen bij complex tier of wanneer doelgroep meerdere duidelijk verschillende subgroepen heeft; hogere validiteit maar extra tijd voor karakterisering en validatiesessies
 - Optional fase 4 (financieel businessplan / implementatieadvies): 8-15d extra
 
 **Propose the day estimates with brief reasoning.** Example:
@@ -135,18 +198,50 @@ The phrase to use in the offerte (inside the fase 1 description):
 `"Binnen het huidige budget werken we [N] outcomes financieel uit."`
 For a range: `"Binnen het huidige budget werken we 8 tot 10 outcomes financieel uit; bij een verruimd budget kunnen we dit uitbreiden naar 12 outcomes."`
 
-### Team
-Read `${CLAUDE_PLUGIN_ROOT}/data/team.json`. Based on the project type and client, suggest:
-- 1 supervisor from: Els, Björn, Ruben, Laura, Michalli
-- 1 project manager from: managers list
-- 1-2 associates/analysts
+### ⬡ Team + Tarief — use AskUserQuestion (both in one call)
 
-Prefer team members with relevant domain experience (healthcare → Laura; international/scaling → Björn; etc.).
-Ask the user to confirm or select differently: "Kloppen deze teamleden, of wil je anderen?"
+Read `data/team.json` first. Then present **both choices in a single `AskUserQuestion` call** with 2 questions — this keeps the conversation flowing without two separate interruptions.
 
-### Day rate
-**Always ask explicitly**: "Geldt het standaardtarief van €1.480 per dag, of het NGO-tarief van €1.280?"
-Only use a different rate if the user explicitly specifies one.
+**Question 1 — Team:**
+- **Header**: `"Team"`
+- **Question**: `"Welk team stel je voor deze opdracht voor?"`
+- **Option A / B / C**: Each = 1 supervisor + 1 manager + 1-2 associates/analysts + 1-line rationale. Example: `"Laura Brouwer + Dieuwertje Roos + Dorine Klein Gunnewiek — Laura heeft sterke achtergrond in zorg en preventie"`
+- **Option D**: `"Andere samenstelling (vul zelf in)"`
+
+Domain hints: healthcare/GGZ → Laura; international/scaling → Björn; finance/systemic → Ruben; government/policy → Els; social enterprise → Michalli.
+
+**Question 2 — Tarief:**
+- **Header**: `"Tarief"`
+- **Question**: `"Welk dagtarief hanteren we voor deze opdracht?"`
+- **Option A**: `"Standaard — €1.480 per dag (commercieel tarief)"`
+- **Option B**: `"NGO-tarief — €1.280 per dag (maatschappelijke organisatie)"`
+- **Option C**: `"Ander tarief (specificeer)"`
+
+Only calculate the budget after both are confirmed.
+
+### Tarief kanttekening
+Always include this note in the begroting slide:
+> "Het tarief is een teamtarief gebaseerd op een team bestaande uit een director, manager en associate/analyst."
+
+If a **reduced rate** is agreed (NGO-tarief or custom discount), draft a motivation paragraph covering:
+1. Waarom SFNL gelooft dat dit project bijdraagt aan sociale impact
+2. Het gereduceerde tarief en het standaardtarief ter vergelijking
+3. Waarom SFNL dit wil honoreren
+
+Stel dit als concepttekst voor en vraag de gebruiker om het te bevestigen voor het in de offerte gaat. Voorbeeld-structuur (altijd aanpassen aan de specifieke casus):
+> "Voor deze opdracht hanteren we een gereduceerd Social Finance NL tarief van €[x] per dag (op basis van 8 uur). Het standaardtarief van Social Finance NL bedraagt €1.480 per dag. Wij zijn van mening dat [kernmotivatie specifiek voor klant/interventie]. Social Finance NL wil hier graag aan bijdragen en om dit kracht bij te zetten hanteren wij voor deze opdracht een gereduceerd tarief."
+
+### Randvoorwaarden (slide 16)
+Stel de volgende standaard randvoorwaarden altijd voor in stap 2c. De gebruiker kan items toevoegen of verwijderen.
+
+**Standaard randvoorwaarden (altijd meenemen):**
+1. Het tijdig aanleveren van relevante documentatie, (financiële) data en deelnemersgegevens
+2. Het tijdig beschikbaar stellen van stakeholders voor interviews en het faciliteren van een warme introductie
+3. De beschikbaarheid van deelnemersgegevens m.b.t. in- en uitstroomposities van deelnemers
+4. Een vast aanspreekpunt binnen de organisatie gedurende het gehele traject
+5. Data wordt aangeleverd in een gestructureerd, leesbaar formaat (bij voorkeur Excel); ruwe bestanden zonder toelichting worden niet geaccepteerd
+
+Present them briefly — "Ik stel de volgende standaard randvoorwaarden voor, wil je er iets aan toevoegen of weglaten?" — then include the confirmed list in the config JSON under `randvoorwaarden`.
 
 ### Budget calculation
 Calculate: `total_days × day_rate = total_excl_btw`
@@ -160,12 +255,12 @@ Show all numbers clearly so user can confirm.
 
 ---
 
-## GENERATE — Build config & run script
+## GENERATE — Build config & invoke the pptx skill
 
-Once all 3 steps are confirmed, build the config JSON and run the generator.
+Once all 3 steps are confirmed, build the config JSON and then invoke `anthropic-skills:pptx` to fill in the template. **Do NOT use `scripts/generate_offerte.py`** — the Python script strips run-level formatting. The pptx skill writes proper python-pptx code that preserves all fonts, colors, and styles.
 
 ### 1. Build the config file
-Ask the user where to save the output if not specified. Save config alongside the PPTX.
+Save to: `output/config_[klant_slug]_[YYYYMMDD].json`
 
 Config structure:
 ```json
@@ -200,8 +295,8 @@ Config structure:
         "tijdlijn": "november - december 2025",
         "outcomes_note": "Binnen het huidige budget werken we 9 outcomes financieel uit."
       },
-      { "number": 2, "name": "MAATSCHAPPELIJKE BUSINESSCASE", "...": "..." },
-      { "number": 3, "name": "ADVIES DUURZAME FINANCIERING EN COMMUNICATIE", "...": "..." }
+      { "number": 2, "name": "MAATSCHAPPELIJKE BUSINESSCASE" },
+      { "number": 3, "name": "ADVIES DUURZAME FINANCIERING EN COMMUNICATIE" }
     ]
   },
 
@@ -226,33 +321,96 @@ Config structure:
     "btw_percentage": 21,
     "btw": 8702,
     "total_incl_btw": 50142,
+    "tarief_kanttekening": "Het tarief is een teamtarief gebaseerd op een team bestaande uit een director, manager en associate/analyst.",
+    "tarief_motivatie": null,
     "betaaltermijnen": [
       { "description": "Bij aanvang project (33%)", "amount": 13675 },
       { "description": "Na afronding fase 2 (33%)", "amount": 13675 },
       { "description": "Bij oplevering eindrapport (34%)", "amount": 14090 }
     ]
-  }
+  },
+
+  "randvoorwaarden": [
+    "Het tijdig aanleveren van relevante documentatie, (financiële) data en deelnemersgegevens",
+    "Het tijdig beschikbaar stellen van stakeholders voor interviews en het faciliteren van een warme introductie",
+    "De beschikbaarheid van deelnemersgegevens m.b.t. in- en uitstroomposities van deelnemers",
+    "Een vast aanspreekpunt binnen de organisatie gedurende het gehele traject",
+    "Data wordt aangeleverd in een gestructureerd, leesbaar formaat (bij voorkeur Excel); ruwe bestanden zonder toelichting worden niet geaccepteerd"
+  ]
 }
 ```
 
-### 2. Run the generator
-```bash
-py "${CLAUDE_PLUGIN_ROOT}/scripts/generate_offerte.py" \
-   "config_[slug].json" \
-   "[OUTPUT_PATH]/[YYYYMMDD] Offerte [Klant] SFNL.pptx"
+### 2. Confirm output path, then invoke the `anthropic-skills:pptx` skill
+
+Before invoking the pptx skill, confirm the output path with the user. Suggest:
+`%USERPROFILE%\.projects SFNL\sfnl_offerte.schrijven\output\[YYYYMMDD] Offerte [Klant] SFNL.pptx`
+and ask if they want to save it elsewhere. Resolve `%USERPROFILE%` to the actual home path on their system.
+
+Then use the Skill tool to invoke `anthropic-skills:pptx`. Provide it with these instructions verbatim, filled in with the config values:
+
+---
+
+**Task**: Fill in the SFNL proposal template. Open:
+`%USERPROFILE%\.projects SFNL\sfnl_offerte.schrijven\templates\offerte_mbc_template.pptx`
+(resolve %USERPROFILE% to the actual home directory path before opening)
+
+**Critical formatting rule — read this first**: Replace text by modifying run text only (`run.text = new_value`). **Never** call `set_shape_full_text` or create new `<a:p>` elements from scratch — this destroys fonts, sizes, and colors. To write multiple paragraphs into a text frame, keep the existing `<a:p>` elements and only change the `<a:t>` text inside each `<a:r>` run. Add extra paragraphs by deep-copying the first existing paragraph and appending it. Slides 17 and beyond are SFNL boilerplate — **never modify them**.
+
+**Slide 1 (Cover)**: Replace all occurrences of `[naam klant]`, `[naam project]`, `[NAAM PROJECT]` with the client name. Replace the date placeholder with the proposal date.
+
+**Slide 3 (Aanleiding)**:
+- Replace `[SAMENVATTENDE ZIN]` with the summary_line.
+- Find the shape containing "Maatschappelijk vraagstuk" → set paragraph 1 to "Maatschappelijk vraagstuk" (keep its bold formatting), paragraph 2 to the maatschappelijk_vraagstuk text.
+- Same pattern for "Grootste uitdagingen" and "Behoefte van de klant" shapes.
+- Clear any shape whose text starts with "LET OP" (set its text to empty string).
+
+**Slide 6 (Aanpak overzicht)**:
+- Find the shape containing "IN DRIE FASES" → replace with the overview_subtitle.
+- Find each chevron label shape starting with "FASE 1:", "FASE 2:", "FASE 3:" → replace with "FASE [N]: [NAME]".
+- Find the 3 rectangle description shapes (longest text blocks in the slide, not chevrons) → replace with each fase's overview_description.
+- Find timeline date label shapes (small text boxes containing digits like a month/year) → replace with each fase's tijdlijn.
+
+**Slides 7, 8, 9 (Fase 1, 2, 3 detail)** — for each slide:
+- Find title shape (shape named "Title 4" or similar) → set to "[N]. [FASE NAME]".
+- Find the left text box containing "Doel" → set paragraphs to: "Doel" / [doel text] / "" / "Aanpak" / [aanpak text].
+- Find the right text box containing "Acties Social Finance NL" → set paragraphs to:
+  "Acties Social Finance NL:" / "   [item]" for each acties_sfnl / "" / [outcomes_note if present] / "" / "Acties [client_name]:" / "   [item]" for each acties_klant / "" / "Deliverable fase [N]: [deliverable]" / "" / "Duur: [dagen] dagen"
+- Clear any shape whose text starts with "LET OP".
+
+**Slide 10 (Tijdslijn)**: Find the shape containing "BINNEN" and "MAANDEN" → replace with the tijdslijn header.
+
+**Slide 13 (Team)**:
+- Find name/title blocks containing "[TEAMLID]" → replace with "[MEMBER NAME]\n[title_short]" for each of the 3 team members.
+- Find bio blocks containing "[Cv-omschrijving]" → replace with each member's bio text.
+
+**Slide 15 (Begroting)**: Find the main budget text box (contains "Algemene Voorwaarden") → replace its content with:
+```
+Social Finance NL voert de opdracht uit op basis van onze Algemene Voorwaarden.
+Het tarief is exclusief BTW en op basis van 8 uur per dag.
+Dit tarief is inclusief reiskosten binnen Nederland.
+
+[For each budget row]: [fase naam]: [dagen] dagen x € [tarief] = € [totaal]
+
+Totaal (excl. BTW): € [total_excl_btw]
+BTW (21%): € [btw]
+Totaal (incl. BTW): € [total_incl_btw]
 ```
 
-**Extra fases (4+)**: If there are more than 3 fases, the generator prints a notice but does NOT insert them automatically — the overview slide (slide 6) only has 3 chevrons, so mechanical insertion would create a visual inconsistency. Handle extra fases as an explicit step after generation:
-1. First check: does fase 4 warrant its own slide, or can it be integrated into fase 3's text?
-2. If it needs a slide, use `insert_extra_fase()` from the module:
-```python
-from pathlib import Path; import sys; sys.path.insert(0, "${CLAUDE_PLUGIN_ROOT}/scripts")
-from generate_offerte import Presentation, insert_extra_fase
-prs = Presentation("output/[file].pptx")
-insert_extra_fase(prs, cfg["aanpak"]["fases"][3], "[client_name]", extra_count=0)
-prs.save("output/[file].pptx")
-```
-3. Tell the user to adjust the overview slide (slide 6) manually in PowerPoint — add or relabel the 4th chevron.
+**Slide 16 (Randvoorwaarden en akkoord)**:
+- Replace all `[naam klant]` with the client name.
+- Find the randvoorwaarden text box → set paragraphs to:
+  "Randvoorwaarden" / "Zodra er akkoord is op de offerte wordt de definitieve teamsamenstelling vastgesteld." / "De planning is indicatief en wordt vastgesteld in overleg met [client] na akkoord op de offerte." / "Zonder vooraf verkregen toestemming zal SFNL geen meerwerk in rekening brengen." / "" / "Facturatieschema:" / [one line per betaaltermijn: "€ [amount] — [description]"]
+
+Save the result to: `[OUTPUT_PATH]`
+
+**After saving — return the file in chat**: Use the `present_files` tool if available to deliver the file directly in the conversation. If `present_files` is not available, post the full absolute path in a clearly formatted message so the user can copy it and open the file immediately. Example:
+
+> Offerte gegenereerd en opgeslagen:
+> `C:\Users\...\output\20260311 Offerte Klant SFNL.pptx`
+
+---
+
+**Extra fases (4+)**: If the config has more than 3 fases, after the pptx skill completes, instruct it to duplicate slide 9 (fase 3) by cloning its XML, insert the clone before the tijdslijn slide, and fill in the extra fase's content using the same approach. Then tell the user to manually adjust slide 6 (the chevrons) in PowerPoint to add or relabel the extra chevron.
 
 ---
 
@@ -262,7 +420,7 @@ After generation, launch a **general-purpose sub-agent** to review the output. T
 
 ### 1. Run the deterministic review script
 ```bash
-py "${CLAUDE_PLUGIN_ROOT}/scripts/review_offerte.py" \
+py "%USERPROFILE%/.projects SFNL/sfnl_offerte.schrijven/scripts/review_offerte.py" \
    "[output_pptx_path]" \
    "[config_json_path]"
 ```
@@ -295,6 +453,8 @@ Based on the client context, flag any slides worth adding manually:
 - An optional fase 4 slide if a financial business plan was discussed
 
 ### 4. Return a structured report
+The sub-agent should return a report in this format:
+
 ```
 SFNL REVIEW RAPPORT — [klant naam]
 
