@@ -340,77 +340,65 @@ Config structure:
 }
 ```
 
-### 2. Confirm output path, then invoke the `anthropic-skills:pptx` skill
+### 2. Confirm output path, then invoke `anthropic-skills:pptx-sfnl`
 
-Before invoking the pptx skill, confirm the output path with the user. Suggest:
+Before invoking, confirm the output path with the user. Suggest:
 `%USERPROFILE%\.projects SFNL\sfnl_offerte.schrijven\output\[YYYYMMDD] Offerte [Klant] SFNL.pptx`
-and ask if they want to save it elsewhere. Resolve `%USERPROFILE%` to the actual home path on their system.
+Resolve `%USERPROFILE%` to the actual home path on their system.
 
-Then use the Skill tool to invoke `anthropic-skills:pptx`. Provide it with these instructions verbatim, filled in with the config values:
+Use the Skill tool to invoke `anthropic-skills:pptx-sfnl`. The skill uses an **unpack → Edit tool on XML → pack** workflow which preserves all formatting natively because the Edit tool does targeted string replacement inside the existing `<a:t>` elements — leaving all surrounding `<a:rPr>` font/color/size tags completely untouched.
+
+Pass the following instructions to the pptx-sfnl skill:
 
 ---
 
-**Task**: Fill in the SFNL proposal template. Open:
-`%USERPROFILE%\.projects SFNL\sfnl_offerte.schrijven\templates\offerte_mbc_template.pptx`
-(resolve %USERPROFILE% to the actual home directory path before opening)
+**Template**: `%USERPROFILE%\.projects SFNL\sfnl_offerte.schrijven\templates\offerte_mbc_template.pptx`
 
-**Critical formatting rule — read this first**: Replace text by modifying run text only (`run.text = new_value`). **Never** call `set_shape_full_text` or create new `<a:p>` elements from scratch — this destroys fonts, sizes, and colors. To write multiple paragraphs into a text frame, keep the existing `<a:p>` elements and only change the `<a:t>` text inside each `<a:r>` run. Add extra paragraphs by deep-copying the first existing paragraph and appending it. Slides 17 and beyond are SFNL boilerplate — **never modify them**.
+**Output**: `[OUTPUT_PATH]`
 
-**Slide 1 (Cover)**: Replace all occurrences of `[naam klant]`, `[naam project]`, `[NAAM PROJECT]` with the client name. Replace the date placeholder with the proposal date.
+**Workflow**: Follow the unpack → Edit → clean → pack steps from `editing.md`. Use subagents to edit slides in parallel where possible. **Slides 17 and beyond are fixed SFNL boilerplate — never touch them.**
+
+**Content to fill in per slide** (find placeholder text in the unpacked XML and replace it using the Edit tool):
+
+**Slide 1 (Cover)**:
+- `[naam klant]`, `[naam project]`, `[NAAM PROJECT]` → `[client_name]`
+- Date placeholder → `[proposal_date]`
 
 **Slide 3 (Aanleiding)**:
-- Replace `[SAMENVATTENDE ZIN]` with the summary_line.
-- Find the shape containing "Maatschappelijk vraagstuk" → set paragraph 1 to "Maatschappelijk vraagstuk" (keep its bold formatting), paragraph 2 to the maatschappelijk_vraagstuk text.
-- Same pattern for "Grootste uitdagingen" and "Behoefte van de klant" shapes.
-- Clear any shape whose text starts with "LET OP" (set its text to empty string).
+- `[SAMENVATTENDE ZIN]` → `[aanleiding.summary_line]`
+- In the shape containing "Maatschappelijk vraagstuk": replace the placeholder body paragraph text with `[aanleiding.maatschappelijk_vraagstuk]` (keep the bold header paragraph intact)
+- Same pattern for "Grootste uitdagingen" → `[aanleiding.grootste_uitdagingen]`
+- Same pattern for "Behoefte van de klant" → `[aanleiding.behoefte_van_klant]`
+- Any `<a:t>` element starting with "LET OP" → clear to empty string
 
 **Slide 6 (Aanpak overzicht)**:
-- Find the shape containing "IN DRIE FASES" → replace with the overview_subtitle.
-- Find each chevron label shape starting with "FASE 1:", "FASE 2:", "FASE 3:" → replace with "FASE [N]: [NAME]".
-- Find the 3 rectangle description shapes (longest text blocks in the slide, not chevrons) → replace with each fase's overview_description.
-- Find timeline date label shapes (small text boxes containing digits like a month/year) → replace with each fase's tijdlijn.
+- "IN DRIE FASES…" subtitle → `[aanpak.overview_subtitle]`
+- "FASE 1:" chevron label → `FASE 1: [fases[0].name]`
+- "FASE 2:" chevron label → `FASE 2: [fases[1].name]`
+- "FASE 3:" chevron label → `FASE 3: [fases[2].name]`
+- The 3 description rectangle text blocks → each fase's `overview_description`
+- Timeline date labels → each fase's `tijdlijn`
 
-**Slides 7, 8, 9 (Fase 1, 2, 3 detail)** — for each slide:
-- Find title shape (shape named "Title 4" or similar) → set to "[N]. [FASE NAME]".
-- Find the left text box containing "Doel" → set paragraphs to: "Doel" / [doel text] / "" / "Aanpak" / [aanpak text].
-- Find the right text box containing "Acties Social Finance NL" → set paragraphs to:
-  "Acties Social Finance NL:" / "   [item]" for each acties_sfnl / "" / [outcomes_note if present] / "" / "Acties [client_name]:" / "   [item]" for each acties_klant / "" / "Deliverable fase [N]: [deliverable]" / "" / "Duur: [dagen] dagen"
-- Clear any shape whose text starts with "LET OP".
+**Slides 7, 8, 9 (Fase 1, 2, 3)**:
+For each: title placeholder → `[N]. [FASE NAME]`; left box (contains "Doel") body → `doel` text then blank line then `aanpak` text; right box (contains "Acties Social Finance NL") → acties_sfnl bullet list, outcomes_note, acties_klant bullet list, deliverable, duur. Clear any "LET OP" elements.
 
-**Slide 10 (Tijdslijn)**: Find the shape containing "BINNEN" and "MAANDEN" → replace with the tijdslijn header.
+**Slide 10 (Tijdslijn)**:
+- "BINNEN … MAANDEN…" → `[tijdslijn.header]`
 
 **Slide 13 (Team)**:
-- Find name/title blocks containing "[TEAMLID]" → replace with "[MEMBER NAME]\n[title_short]" for each of the 3 team members.
-- Find bio blocks containing "[Cv-omschrijving]" → replace with each member's bio text.
+- `[TEAMLID]` placeholders → `[member.name]` + `[member.title_short]` for each of 3 members
+- `[Cv-omschrijving]` placeholders → `[member.bio]` for each member
 
-**Slide 15 (Begroting)**: Find the main budget text box (contains "Algemene Voorwaarden") → replace its content with:
-```
-Social Finance NL voert de opdracht uit op basis van onze Algemene Voorwaarden.
-Het tarief is exclusief BTW en op basis van 8 uur per dag.
-Dit tarief is inclusief reiskosten binnen Nederland.
-
-[For each budget row]: [fase naam]: [dagen] dagen x € [tarief] = € [totaal]
-
-Totaal (excl. BTW): € [total_excl_btw]
-BTW (21%): € [btw]
-Totaal (incl. BTW): € [total_incl_btw]
-```
+**Slide 15 (Begroting)**:
+- Budget placeholder text → formatted budget lines: one row per fase (naam · dagen · tarief · totaal), then totals excl. BTW, BTW 21%, totaal incl. BTW, tarief_kanttekening, and tarief_motivatie if present
 
 **Slide 16 (Randvoorwaarden en akkoord)**:
-- Replace all `[naam klant]` with the client name.
-- Find the randvoorwaarden text box → set paragraphs to:
-  "Randvoorwaarden" / "Zodra er akkoord is op de offerte wordt de definitieve teamsamenstelling vastgesteld." / "De planning is indicatief en wordt vastgesteld in overleg met [client] na akkoord op de offerte." / "Zonder vooraf verkregen toestemming zal SFNL geen meerwerk in rekening brengen." / "" / "Facturatieschema:" / [one line per betaaltermijn: "€ [amount] — [description]"]
+- All `[naam klant]` → `[client_name]`
+- Randvoorwaarden body → numbered list of confirmed randvoorwaarden, then blank line, then "Facturatieschema:" header, then one line per betaaltermijn
 
-Save the result to: `[OUTPUT_PATH]`
+**After packing — return the file in chat**: Use `present_files` if available. Otherwise post the full absolute path clearly so the user can open it immediately.
 
-**After saving — return the file in chat**: Use the `present_files` tool if available to deliver the file directly in the conversation. If `present_files` is not available, post the full absolute path in a clearly formatted message so the user can copy it and open the file immediately. Example:
-
-> Offerte gegenereerd en opgeslagen:
-> `C:\Users\...\output\20260311 Offerte Klant SFNL.pptx`
-
----
-
-**Extra fases (4+)**: If the config has more than 3 fases, after the pptx skill completes, instruct it to duplicate slide 9 (fase 3) by cloning its XML, insert the clone before the tijdslijn slide, and fill in the extra fase's content using the same approach. Then tell the user to manually adjust slide 6 (the chevrons) in PowerPoint to add or relabel the extra chevron.
+**Extra fases (4+)**: Use `add_slide.py` to duplicate slide 9 (fase 3), insert before the tijdslijn slide, then fill in the extra fase content. Tell the user to manually add a 4th chevron to slide 6 in PowerPoint.
 
 ---
 
