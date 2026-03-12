@@ -255,14 +255,13 @@ Show all numbers clearly so user can confirm.
 
 ---
 
-## GENERATE — Build config & invoke the pptx skill
+## GENERATE — Build config & invoke the pptx-offerte skill
 
-Once all 3 steps are confirmed, build the config JSON and then invoke `anthropic-skills:pptx` to fill in the template. **Do NOT use `scripts/generate_offerte.py`** — the Python script strips run-level formatting. The pptx skill writes proper python-pptx code that preserves all fonts, colors, and styles.
+Once all 3 steps are confirmed:
 
 ### 1. Build the config file
 Save to: `output/config_[klant_slug]_[YYYYMMDD].json`
 
-Config structure:
 ```json
 {
   "client_name": "...",
@@ -271,134 +270,48 @@ Config structure:
   "proposal_date": "maand jaar",
   "day_rate": 1480,
   "factuuradres": null,
-
   "aanleiding": {
     "summary_line": "...",
     "maatschappelijk_vraagstuk": "...",
     "grootste_uitdagingen": "...",
     "behoefte_van_klant": "..."
   },
-
   "aanpak": {
     "overview_subtitle": "IN DRIE FASES BRENGEN WE...",
     "fases": [
       {
-        "number": 1,
-        "name": "IMPACTNARRATIEF",
-        "overview_description": "Het impactnarratief beschrijft...",
-        "doel": "...",
-        "aanpak": "...",
-        "acties_sfnl": ["Deskresearch", "Kick-off meeting organiseren", "..."],
-        "acties_klant": ["Documentatie aanleveren", "Deelname interviews", "..."],
-        "deliverable": "Verandertheorie, effectenkaart en geselecteerde outcomes",
-        "dagen": 8,
-        "tijdlijn": "november - december 2025",
+        "number": 1, "name": "IMPACTNARRATIEF",
+        "overview_description": "...", "doel": "...", "aanpak": "...",
+        "acties_sfnl": ["..."], "acties_klant": ["..."],
+        "deliverable": "...", "dagen": 8, "tijdlijn": "...",
         "outcomes_note": "Binnen het huidige budget werken we 9 outcomes financieel uit."
       },
-      { "number": 2, "name": "MAATSCHAPPELIJKE BUSINESSCASE" },
-      { "number": 3, "name": "ADVIES DUURZAME FINANCIERING EN COMMUNICATIE" }
+      { "number": 2, "name": "MAATSCHAPPELIJKE BUSINESSCASE", ... },
+      { "number": 3, "name": "ADVIES DUURZAME FINANCIERING EN COMMUNICATIE", ... }
     ]
   },
-
-  "tijdslijn": {
-    "maanden": 4,
-    "header": "BINNEN VIER MAANDEN STELLEN WE DE MAATSCHAPPELIJKE BUSINESSCASE OP"
-  },
-
+  "tijdslijn": { "maanden": 4, "header": "BINNEN VIER MAANDEN..." },
   "team": [
     { "name": "Laura Brouwer", "title_short": "ASSOCIATE DIRECTOR", "bio": "..." },
     { "name": "Dieuwertje Roos", "title_short": "MANAGER", "bio": "..." },
     { "name": "Dorine Klein Gunnewiek", "title_short": "ANALYST", "bio": "..." }
   ],
-
   "begroting": {
-    "rows": [
-      { "fase": "Fase 1: Impactnarratief", "dagen": 8, "tarief": 1480, "totaal": 11840 },
-      { "fase": "Fase 2: Maatschappelijke businesscase", "dagen": 14, "tarief": 1480, "totaal": 20720 },
-      { "fase": "Fase 3: Advies duurzame financiering", "dagen": 6, "tarief": 1480, "totaal": 8880 }
-    ],
-    "total_excl_btw": 41440,
-    "btw_percentage": 21,
-    "btw": 8702,
-    "total_incl_btw": 50142,
+    "rows": [{ "fase": "Fase 1: Impactnarratief", "dagen": 8, "tarief": 1480, "totaal": 11840 }, ...],
+    "total_excl_btw": 41440, "btw_percentage": 21, "btw": 8702, "total_incl_btw": 50142,
     "tarief_kanttekening": "Het tarief is een teamtarief gebaseerd op een team bestaande uit een director, manager en associate/analyst.",
     "tarief_motivatie": null,
-    "betaaltermijnen": [
-      { "description": "Bij aanvang project (33%)", "amount": 13675 },
-      { "description": "Na afronding fase 2 (33%)", "amount": 13675 },
-      { "description": "Bij oplevering eindrapport (34%)", "amount": 14090 }
-    ]
+    "betaaltermijnen": [{ "description": "Bij aanvang project (33%)", "amount": 13675 }, ...]
   },
-
-  "randvoorwaarden": [
-    "Het tijdig aanleveren van relevante documentatie, (financiële) data en deelnemersgegevens",
-    "Het tijdig beschikbaar stellen van stakeholders voor interviews en het faciliteren van een warme introductie",
-    "De beschikbaarheid van deelnemersgegevens m.b.t. in- en uitstroomposities van deelnemers",
-    "Een vast aanspreekpunt binnen de organisatie gedurende het gehele traject",
-    "Data wordt aangeleverd in een gestructureerd, leesbaar formaat (bij voorkeur Excel); ruwe bestanden zonder toelichting worden niet geaccepteerd"
-  ]
+  "randvoorwaarden": ["..."]
 }
 ```
 
-### 2. Confirm output path, then invoke `anthropic-skills:pptx-sfnl`
+### 2. Confirm output path, then invoke the `pptx-offerte` skill
 
-Before invoking, confirm the output path with the user. Suggest:
-`%USERPROFILE%\.projects SFNL\sfnl_offerte.schrijven\output\[YYYYMMDD] Offerte [Klant] SFNL.pptx`
-Resolve `%USERPROFILE%` to the actual home path on their system.
+Suggest: `%USERPROFILE%\.projects SFNL\sfnl_offerte.schrijven\output\[YYYYMMDD] Offerte [Klant] SFNL.pptx`
 
-Use the Skill tool to invoke `anthropic-skills:pptx-sfnl`. The skill uses an **unpack → Edit tool on XML → pack** workflow which preserves all formatting natively because the Edit tool does targeted string replacement inside the existing `<a:t>` elements — leaving all surrounding `<a:rPr>` font/color/size tags completely untouched.
-
-Pass the following instructions to the pptx-sfnl skill:
-
----
-
-**Template**: `%USERPROFILE%\.projects SFNL\sfnl_offerte.schrijven\templates\offerte_mbc_template.pptx`
-
-**Output**: `[OUTPUT_PATH]`
-
-**Workflow**: Follow the unpack → Edit → clean → pack steps from `editing.md`. Use subagents to edit slides in parallel where possible. **Slides 17 and beyond are fixed SFNL boilerplate — never touch them.**
-
-**Content to fill in per slide** (find placeholder text in the unpacked XML and replace it using the Edit tool):
-
-**Slide 1 (Cover)**:
-- `[naam klant]`, `[naam project]`, `[NAAM PROJECT]` → `[client_name]`
-- Date placeholder → `[proposal_date]`
-
-**Slide 3 (Aanleiding)**:
-- `[SAMENVATTENDE ZIN]` → `[aanleiding.summary_line]`
-- In the shape containing "Maatschappelijk vraagstuk": replace the placeholder body paragraph text with `[aanleiding.maatschappelijk_vraagstuk]` (keep the bold header paragraph intact)
-- Same pattern for "Grootste uitdagingen" → `[aanleiding.grootste_uitdagingen]`
-- Same pattern for "Behoefte van de klant" → `[aanleiding.behoefte_van_klant]`
-- Any `<a:t>` element starting with "LET OP" → clear to empty string
-
-**Slide 6 (Aanpak overzicht)**:
-- "IN DRIE FASES…" subtitle → `[aanpak.overview_subtitle]`
-- "FASE 1:" chevron label → `FASE 1: [fases[0].name]`
-- "FASE 2:" chevron label → `FASE 2: [fases[1].name]`
-- "FASE 3:" chevron label → `FASE 3: [fases[2].name]`
-- The 3 description rectangle text blocks → each fase's `overview_description`
-- Timeline date labels → each fase's `tijdlijn`
-
-**Slides 7, 8, 9 (Fase 1, 2, 3)**:
-For each: title placeholder → `[N]. [FASE NAME]`; left box (contains "Doel") body → `doel` text then blank line then `aanpak` text; right box (contains "Acties Social Finance NL") → acties_sfnl bullet list, outcomes_note, acties_klant bullet list, deliverable, duur. Clear any "LET OP" elements.
-
-**Slide 10 (Tijdslijn)**:
-- "BINNEN … MAANDEN…" → `[tijdslijn.header]`
-
-**Slide 13 (Team)**:
-- `[TEAMLID]` placeholders → `[member.name]` + `[member.title_short]` for each of 3 members
-- `[Cv-omschrijving]` placeholders → `[member.bio]` for each member
-
-**Slide 15 (Begroting)**:
-- Budget placeholder text → formatted budget lines: one row per fase (naam · dagen · tarief · totaal), then totals excl. BTW, BTW 21%, totaal incl. BTW, tarief_kanttekening, and tarief_motivatie if present
-
-**Slide 16 (Randvoorwaarden en akkoord)**:
-- All `[naam klant]` → `[client_name]`
-- Randvoorwaarden body → numbered list of confirmed randvoorwaarden, then blank line, then "Facturatieschema:" header, then one line per betaaltermijn
-
-**After packing — return the file in chat**: Use `present_files` if available. Otherwise post the full absolute path clearly so the user can open it immediately.
-
-**Extra fases (4+)**: Use `add_slide.py` to duplicate slide 9 (fase 3), insert before the tijdslijn slide, then fill in the extra fase content. Tell the user to manually add a 4th chevron to slide 6 in PowerPoint.
+Use the Skill tool to invoke the **`pptx-offerte`** skill (bundled in this plugin). Pass it the config JSON and the confirmed output path. The skill handles the full workflow: unpack → edit XML → clean → pack → visual QA → return file in chat.
 
 ---
 
