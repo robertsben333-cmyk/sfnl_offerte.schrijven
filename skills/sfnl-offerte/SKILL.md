@@ -231,7 +231,10 @@ If a **reduced rate** is agreed (NGO-tarief or custom discount), draft a motivat
 Stel dit als concepttekst voor en vraag de gebruiker om het te bevestigen voor het in de offerte gaat. Voorbeeld-structuur (altijd aanpassen aan de specifieke casus):
 > "Voor deze opdracht hanteren we een gereduceerd Social Finance NL tarief van €[x] per dag (op basis van 8 uur). Het standaardtarief van Social Finance NL bedraagt €1.480 per dag. Wij zijn van mening dat [kernmotivatie specifiek voor klant/interventie]. Social Finance NL wil hier graag aan bijdragen en om dit kracht bij te zetten hanteren wij voor deze opdracht een gereduceerd tarief."
 
-### Randvoorwaarden (slide 16)
+### Randvoorwaarden (slide 12 — "Randvoorwaarden voor succes")
+
+> ⚠️ **Slide mapping**: Randvoorwaarden gaan op **slide 12** ("RANDVOORWAARDEN VOOR SUCCES"), NIET op de akkoord-slide. De akkoord-slide (slide 17) bevat alleen handtekeningblokken — zie de "Akkoord" sectie hieronder.
+
 Stel de volgende standaard randvoorwaarden altijd voor in stap 2c. De gebruiker kan items toevoegen of verwijderen.
 
 **Standaard randvoorwaarden (altijd meenemen):**
@@ -242,6 +245,16 @@ Stel de volgende standaard randvoorwaarden altijd voor in stap 2c. De gebruiker 
 5. Data wordt aangeleverd in een gestructureerd, leesbaar formaat (bij voorkeur Excel); ruwe bestanden zonder toelichting worden niet geaccepteerd
 
 Present them briefly — "Ik stel de volgende standaard randvoorwaarden voor, wil je er iets aan toevoegen of weglaten?" — then include the confirmed list in the config JSON under `randvoorwaarden`.
+
+### ⬡ Akkoord / ondertekening (slide 17)
+
+Slide 17 ("RANDVOORWAARDEN EN AKKOORD") bevat twee handtekeningblokken: één voor de klant (links) en één voor Social Finance NL (rechts). Vraag expliciet wie namens SFNL ondertekent:
+
+> "Wie ondertekent de offerte namens Social Finance NL? (Naam + functie)"
+
+Sla dit op als `sfnl_signatory` in de config. Standaard is dit de lead uit het team (doorgaans de director). Als de user niets opgeeft, gebruik dan de eerste persoon in de `team` array.
+
+Het klant-ondertekeningsblok wordt gevuld met `contact_person` (naam) + `client_name` (organisatie).
 
 ### Budget calculation
 Calculate: `total_days × day_rate = total_excl_btw`
@@ -270,6 +283,10 @@ Save to: `output/config_[klant_slug]_[YYYYMMDD].json`
   "proposal_date": "maand jaar",
   "day_rate": 1480,
   "factuuradres": null,
+  "sfnl_signatory": {
+    "name": "Laura Brouwer",
+    "title": "Social Finance NL"
+  },
   "aanleiding": {
     "summary_line": "...",
     "maatschappelijk_vraagstuk": "...",
@@ -306,6 +323,21 @@ Save to: `output/config_[klant_slug]_[YYYYMMDD].json`
   "randvoorwaarden": ["..."]
 }
 ```
+
+**Config field reference:**
+
+| Field | Destination slide | Notes |
+|---|---|---|
+| `client_name` | Cover (1), Akkoord (17) | |
+| `contact_person` | Akkoord (17) — client signing block | |
+| `sfnl_signatory.name` | Akkoord (17) — SFNL signing block | Defaults to team[0].name |
+| `sfnl_signatory.title` | Akkoord (17) — SFNL signing block | Defaults to "Social Finance NL" |
+| `aanleiding.*` | Aanleiding (3) | |
+| `aanpak.fases[]` | Aanpak overzicht (6), Fase detail slides (7–9+) | |
+| `tijdslijn.*` | Tijdslijn (10) | |
+| `team[]` | Team (13) | |
+| `begroting.*` | Begroting (15) — table rows + notes box | |
+| `randvoorwaarden[]` | Randvoorwaarden voor succes (12) | Bullet list, NOT the akkoord slide |
 
 ### 2. Confirm output path, then invoke the `pptx-offerte` skill
 
