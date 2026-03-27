@@ -9,7 +9,7 @@
     {
       "name": "sfnl-offerte",
       "description": "Schrijft SFNL offertes voor maatschappelijke businesscases en duurzame financiering",
-      "version": "2.1.0",
+      "version": "2.1.1",
       "source": "./",
       "author": {
         "name": "Social Finance NL"
