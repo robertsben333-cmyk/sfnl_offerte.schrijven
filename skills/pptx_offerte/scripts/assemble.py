@@ -57,14 +57,14 @@ def assemble(slide_plan: list, output_path: str, base: str = DEFAULT_BASE) -> st
             registry[entry["type"]](prs, entry.get("content", {}))
 
     # New slides were appended after the boilerplate; move them to the front.
-    _move_slides_to_front(prs, len(slide_plan), boilerplate_count)
+    _move_slides_to_front(prs, boilerplate_count)
 
     os.makedirs(os.path.dirname(os.path.abspath(output_path)), exist_ok=True)
     prs.save(output_path)
     return output_path
 
 
-def _move_slides_to_front(prs: Presentation, new_count: int, boilerplate_count: int) -> None:
+def _move_slides_to_front(prs: Presentation, boilerplate_count: int) -> None:
     """Reorder slide XML so new slides precede boilerplate slides."""
     sldIdLst = prs.slides._sldIdLst
     children = list(sldIdLst)
