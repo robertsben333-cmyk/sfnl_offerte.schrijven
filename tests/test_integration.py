@@ -1,9 +1,10 @@
 """Integration smoke tests — generate a minimal PPTX and DOCX end-to-end."""
 import os, sys
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, _ROOT)
 
-BASE_PPTX = "skills/pptx-offerte/assets/sfnl_base.pptx"
-BASE_DOCX = "skills/pptx-offerte/assets/sfnl_base.docx"
+BASE_PPTX = os.path.join(_ROOT, "skills/pptx-offerte/assets/sfnl_base.pptx")
+BASE_DOCX = os.path.join(_ROOT, "skills/pptx-offerte/assets/sfnl_base.docx")
 
 MINIMAL_PLAN = [
     {"type": "cover", "content": {
@@ -41,7 +42,7 @@ def test_pptx_smoke(tmp_path):
     assert os.path.exists(output)
     prs = Presentation(output)
     base_count = len(Presentation(BASE_PPTX).slides)
-    assert len(prs.slides) == base_count + 4
+    assert len(prs.slides) == base_count + len(MINIMAL_PLAN)
 
 
 def test_docx_smoke(tmp_path):
