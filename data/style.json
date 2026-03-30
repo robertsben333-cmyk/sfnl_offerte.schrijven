@@ -1,0 +1,32 @@
+{
+  "colors": {
+    "primary": "#1A1A2E",
+    "white": "#FFFFFF",
+    "accent_mbc": "#E8734A",
+    "accent_impact_meten": "#2B4D8E",
+    "accent_advies_innovatief": "#3D8B7A",
+    "accent_intermediair": "#5B9BD5",
+    "accent_fondsmanagement": "#E8A0A0",
+    "accent_partnerschappen": "#1A2F5A",
+    "text_dark": "#1A1A2E",
+    "text_light": "#FFFFFF",
+    "text_muted": "#666666",
+    "border": "#E0E0E0"
+  },
+  "fonts": {
+    "heading": "Calibri",
+    "body": "Calibri",
+    "heading_bold": true
+  },
+  "sizes": {
+    "slide_width_emu": 9144000,
+    "slide_height_emu": 5143500,
+    "margin_left_emu": 457200,
+    "margin_top_emu": 274320,
+    "margin_right_emu": 457200
+  },
+  "day_rates": {
+    "standard": 1480,
+    "ngo": 1280
+  }
+}
