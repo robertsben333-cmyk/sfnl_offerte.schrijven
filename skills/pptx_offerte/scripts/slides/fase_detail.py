@@ -84,7 +84,7 @@ def add_slide(prs: Presentation, content: dict) -> None:
 
         # Body
         items = body_text if is_list else [body_text]
-        h = row_h * len(items) if is_list else body_h
+        h = max(row_h, row_h * len(items)) if is_list else body_h
         tf = slide.shapes.add_textbox(left_left, cursor, left_w, h)
         tf.text_frame.word_wrap = True
         for j, item in enumerate(items):

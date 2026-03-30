@@ -42,10 +42,11 @@ def test_aanpak_overview_contains_phase_names():
 def test_aanpak_overview_works_with_two_phases():
     from skills.pptx_offerte.scripts.slides.aanpak_overview import add_slide
     prs = Presentation(BASE)
+    before = len(prs.slides)
     content = dict(CONTENT)
     content["phases"] = CONTENT["phases"][:2]
     add_slide(prs, content)
-    assert len(prs.slides) == len(Presentation(BASE).slides) + 1
+    assert len(prs.slides) == before + 1
 
 
 def test_aanpak_overview_contains_subtitle():

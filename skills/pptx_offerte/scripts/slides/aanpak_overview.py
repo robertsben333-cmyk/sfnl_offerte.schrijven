@@ -89,14 +89,16 @@ def add_slide(prs: Presentation, content: dict) -> None:
         run.font.color.rgb = white
 
         # Description box
-        tf = slide.shapes.add_textbox(left, box_top, chev_w, box_h)
-        tf.text_frame.word_wrap = True
-        p = tf.text_frame.paragraphs[0]
-        run = p.add_run()
-        run.text = phase.get("beschrijving", "")
-        run.font.name = STYLE["fonts"]["body"]
-        run.font.size = Pt(9)
-        run.font.color.rgb = primary
+        beschrijving = phase.get("beschrijving", "")
+        if beschrijving:
+            tf = slide.shapes.add_textbox(left, box_top, chev_w, box_h)
+            tf.text_frame.word_wrap = True
+            p = tf.text_frame.paragraphs[0]
+            run = p.add_run()
+            run.text = beschrijving
+            run.font.name = STYLE["fonts"]["body"]
+            run.font.size = Pt(9)
+            run.font.color.rgb = primary
 
         # Timeline label
         tijdlijn = phase.get("tijdlijn", "")

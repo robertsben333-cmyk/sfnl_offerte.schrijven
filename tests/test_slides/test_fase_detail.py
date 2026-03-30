@@ -55,6 +55,7 @@ def test_fase_detail_contains_acties():
     text = _all_text(prs.slides[-1])
     assert "Deskresearch" in text
     assert "Stakeholderinterviews" in text
+    assert "TESTKLANT" in text
 
 
 def test_fase_detail_contains_deliverable_and_days():
