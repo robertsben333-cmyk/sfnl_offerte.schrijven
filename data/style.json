@@ -19,12 +19,13 @@
     "heading_bold": true
   },
   "sizes": {
-    "slide_width_emu": 9144000,
-    "slide_height_emu": 5143500,
-    "margin_left_emu": 457200,
-    "margin_top_emu": 274320,
-    "margin_right_emu": 457200
+    "slide_width_emu": 12192000,
+    "slide_height_emu": 6858000,
+    "margin_left_emu": 609600,
+    "margin_top_emu": 365760,
+    "margin_right_emu": 609600
   },
+  "blank_layout_name": "Blank",
   "day_rates": {
     "standard": 1480,
     "ngo": 1280

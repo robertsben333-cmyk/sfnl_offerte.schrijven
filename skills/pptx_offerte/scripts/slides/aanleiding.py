@@ -1,22 +1,8 @@
 """PPTX aanleiding slide — vraagstuk, uitdagingen, behoefte."""
-import json, os
 from pptx import Presentation
 from pptx.util import Inches, Pt
-from pptx.dml.color import RGBColor
 from pptx.enum.text import PP_ALIGN
-
-STYLE_PATH = os.path.join(os.path.dirname(__file__), "../../../../data/style.json")
-with open(STYLE_PATH) as f:
-    STYLE = json.load(f)
-
-ACCENT_MAP = {
-    "mbc": "accent_mbc",
-    "impact_meten": "accent_impact_meten",
-    "advies_innovatieve_financiering": "accent_advies_innovatief",
-    "intermediair": "accent_intermediair",
-    "fondsmanagement": "accent_fondsmanagement",
-    "partnerschappen": "accent_partnerschappen",
-}
+from skills.pptx_offerte.scripts.slides._utils import STYLE, ACCENT_MAP, hex_color as _hex, blank_layout
 
 BLOCK_LABELS = [
     ("vraagstuk", "MAATSCHAPPELIJK VRAAGSTUK"),
@@ -24,9 +10,6 @@ BLOCK_LABELS = [
     ("behoefte", "BEHOEFTE VAN DE KLANT"),
 ]
 
-def _hex(key: str) -> RGBColor:
-    h = STYLE["colors"][key].lstrip("#")
-    return RGBColor(int(h[0:2], 16), int(h[2:4], 16), int(h[4:6], 16))
 
 def add_slide(prs: Presentation, content: dict) -> None:
     """
@@ -35,7 +18,7 @@ def add_slide(prs: Presentation, content: dict) -> None:
     """
     W = prs.slide_width
     H = prs.slide_height
-    slide = prs.slides.add_slide(prs.slide_layouts[6])
+    slide = prs.slides.add_slide(blank_layout(prs))
 
     proposition = content.get("proposition", "mbc")
     accent = _hex(ACCENT_MAP.get(proposition, "accent_mbc"))
