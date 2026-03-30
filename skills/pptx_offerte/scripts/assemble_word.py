@@ -9,12 +9,12 @@ DEFAULT_BASE = os.path.join(ASSETS_DIR, "sfnl_base.docx")
 # Known section types for upfront validation
 _KNOWN_TYPES: frozenset = frozenset({"cover", "aanleiding", "team"})
 
-_REGISTRY: dict = {}
+_REGISTRY: dict | None = None
 
 
 def _load_registry() -> None:
     global _REGISTRY
-    if _REGISTRY:
+    if _REGISTRY is not None:
         return
     from skills.pptx_offerte.scripts.word import cover, aanleiding, team
     _REGISTRY = {
@@ -43,6 +43,7 @@ def assemble_word(slide_plan: list, output_path: str, base: str = DEFAULT_BASE) 
 
     if slide_plan:
         _load_registry()
+        assert _REGISTRY is not None
 
     doc = Document(base)
 
