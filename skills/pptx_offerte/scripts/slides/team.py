@@ -65,7 +65,7 @@ def add_slide(prs: Presentation, content: dict) -> None:
         p = tf.text_frame.paragraphs[0]
         run = p.add_run()
         run.text = member.get("title", "")
-        run.font.name = STYLE["fonts"]["body"]
+        run.font.name = STYLE["fonts"]["subtitle"]
         run.font.size = Pt(9)
         run.font.bold = True
         run.font.color.rgb = accent

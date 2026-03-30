@@ -14,8 +14,9 @@
     "border": "#E0E0E0"
   },
   "fonts": {
-    "heading": "Calibri",
-    "body": "Calibri",
+    "heading": "Gotham Bold",
+    "subtitle": "Montserrat Light",
+    "body": "Lato Light",
     "heading_bold": true
   },
   "sizes": {

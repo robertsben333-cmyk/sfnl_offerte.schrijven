@@ -3,7 +3,7 @@ import os, sys
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../.."))
 from docx import Document
 
-BASE = "skills/pptx-offerte/assets/sfnl_base.docx"
+BASE = "skills/pptx_offerte/assets/sfnl_base.docx"
 CONTENT = {"client": "Testorg", "title": "PROJECTTITEL", "date": "april 2026", "proposition": "mbc"}
 
 

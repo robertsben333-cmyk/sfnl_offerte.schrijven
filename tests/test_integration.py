@@ -3,8 +3,8 @@ import os, sys
 _ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, _ROOT)
 
-BASE_PPTX = os.path.join(_ROOT, "skills/pptx-offerte/assets/sfnl_base.pptx")
-BASE_DOCX = os.path.join(_ROOT, "skills/pptx-offerte/assets/sfnl_base.docx")
+BASE_PPTX = os.path.join(_ROOT, "skills/pptx_offerte/assets/sfnl_base.pptx")
+BASE_DOCX = os.path.join(_ROOT, "skills/pptx_offerte/assets/sfnl_base.docx")
 
 MINIMAL_PLAN = [
     {"type": "cover", "content": {
@@ -41,8 +41,7 @@ def test_pptx_smoke(tmp_path):
 
     assert os.path.exists(output)
     prs = Presentation(output)
-    base_count = len(Presentation(BASE_PPTX).slides)
-    assert len(prs.slides) == base_count + len(MINIMAL_PLAN)
+    assert len(prs.slides) == len(MINIMAL_PLAN)
 
 
 def test_docx_smoke(tmp_path):

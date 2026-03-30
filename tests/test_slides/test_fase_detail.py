@@ -3,7 +3,7 @@ import os, sys
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../.."))
 from pptx import Presentation
 
-BASE = "skills/pptx-offerte/assets/sfnl_base.pptx"
+BASE = "skills/pptx_offerte/assets/sfnl_base.pptx"
 
 CONTENT = {
     "number": 1,

@@ -5,7 +5,7 @@ from docx.shared import Pt, Cm, RGBColor
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 
 STYLE_PATH = "data/style.json"
-DST = "skills/pptx-offerte/assets/sfnl_base.docx"
+DST = "skills/pptx_offerte/assets/sfnl_base.docx"
 
 if not os.path.exists(STYLE_PATH):
     print(f"ERROR: {STYLE_PATH} not found. Run from project root.", file=sys.stderr)

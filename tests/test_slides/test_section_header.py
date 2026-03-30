@@ -3,7 +3,7 @@ import os, sys, pytest
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../.."))
 from pptx import Presentation
 
-BASE = "skills/pptx-offerte/assets/sfnl_base.pptx"
+BASE = "skills/pptx_offerte/assets/sfnl_base.pptx"
 CONTENT = {"title": "ONS TEAM", "proposition": "mbc"}
 
 def _all_text(slide) -> str:

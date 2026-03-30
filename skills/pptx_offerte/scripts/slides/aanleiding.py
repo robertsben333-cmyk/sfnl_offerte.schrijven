@@ -1,14 +1,13 @@
 """PPTX aanleiding slide — vraagstuk, uitdagingen, behoefte."""
 from pptx import Presentation
-from pptx.util import Inches, Pt
-from pptx.enum.text import PP_ALIGN
-from skills.pptx_offerte.scripts.slides._utils import STYLE, ACCENT_MAP, hex_color as _hex, blank_layout
-
-BLOCK_LABELS = [
-    ("vraagstuk", "MAATSCHAPPELIJK VRAAGSTUK"),
-    ("uitdagingen", "GROOTSTE UITDAGINGEN"),
-    ("behoefte", "BEHOEFTE VAN DE KLANT"),
-]
+from skills.pptx_offerte.scripts.slides._utils import (
+    ACCENT_MAP,
+    clone_template_slide,
+    find_placeholder,
+    find_shape,
+    hex_color as _hex,
+    set_paragraphs,
+)
 
 
 def add_slide(prs: Presentation, content: dict) -> None:
@@ -16,63 +15,44 @@ def add_slide(prs: Presentation, content: dict) -> None:
     Add aanleiding slide with three text blocks.
     content: summary_line, vraagstuk, uitdagingen, behoefte, proposition
     """
-    W = prs.slide_width
-    H = prs.slide_height
-    slide = prs.slides.add_slide(blank_layout(prs))
+    slide = clone_template_slide(prs, "aanleiding")
 
     proposition = content.get("proposition", "mbc")
     accent = _hex(ACCENT_MAP.get(proposition, "accent_mbc"))
     primary = _hex("primary")
-    white = _hex("white")
+    muted = _hex("text_muted")
 
-    fill = slide.background.fill
-    fill.solid()
-    fill.fore_color.rgb = white
+    set_paragraphs(
+        find_placeholder(slide, 0),
+        [{
+            "text": content.get("title", "AANLEIDING OFFERTE"),
+            "role": "heading",
+            "size": 20,
+            "bold": True,
+            "color": accent,
+        }],
+    )
+    if content.get("summary_line"):
+        set_paragraphs(
+            find_placeholder(slide, 1),
+            [{
+                "text": content["summary_line"],
+                "role": "subtitle",
+                "size": 12,
+                "color": muted,
+            }],
+        )
 
-    # Slide header
-    tf = slide.shapes.add_textbox(Inches(0.5), Inches(0.3), W - Inches(1.0), Inches(0.5))
-    p = tf.text_frame.paragraphs[0]
-    run = p.add_run()
-    run.text = "AANLEIDING"
-    run.font.name = STYLE["fonts"]["heading"]
-    run.font.size = Pt(20)
-    run.font.bold = True
-    run.font.color.rgb = accent
+    def _fill_block(shape_name: str, heading: str, body: str) -> None:
+        set_paragraphs(
+            find_shape(slide, shape_name),
+            [
+                {"text": heading, "role": "body", "size": 11, "bold": True, "color": primary},
+                {"text": "", "role": "body", "size": 6, "color": primary},
+                {"text": body, "role": "body", "size": 10, "color": primary},
+            ],
+        )
 
-    # Summary line
-    summary = content.get("summary_line", "")
-    if summary:
-        tf = slide.shapes.add_textbox(Inches(0.5), Inches(0.9), W - Inches(1.0), Inches(0.4))
-        p = tf.text_frame.paragraphs[0]
-        run = p.add_run()
-        run.text = summary
-        run.font.name = STYLE["fonts"]["body"]
-        run.font.size = Pt(12)
-        run.font.italic = True
-        run.font.color.rgb = _hex("text_muted")
-
-    # Three columns
-    block_w = int((W - Inches(1.0)) / 3)
-    block_h = int(H * 0.60)
-    top = int(H * 0.28)
-
-    for i, (key, label) in enumerate(BLOCK_LABELS):
-        left = int(Inches(0.5) + i * (block_w + Inches(0.1)))
-
-        tf = slide.shapes.add_textbox(left, top, block_w, Inches(0.35))
-        p = tf.text_frame.paragraphs[0]
-        run = p.add_run()
-        run.text = label
-        run.font.name = STYLE["fonts"]["body"]
-        run.font.size = Pt(9)
-        run.font.bold = True
-        run.font.color.rgb = accent
-
-        tf = slide.shapes.add_textbox(left, int(top + Inches(0.38)), block_w, int(block_h - Inches(0.38)))
-        tf.text_frame.word_wrap = True
-        p = tf.text_frame.paragraphs[0]
-        run = p.add_run()
-        run.text = content.get(key, "")
-        run.font.name = STYLE["fonts"]["body"]
-        run.font.size = Pt(10)
-        run.font.color.rgb = primary
+    _fill_block("Rectangle 1", "Maatschappelijk vraagstuk", content.get("vraagstuk", ""))
+    _fill_block("Rectangle 8", "Grootste uitdagingen", content.get("uitdagingen", ""))
+    _fill_block("Rectangle 9", "Behoefte van de klant", content.get("behoefte", ""))

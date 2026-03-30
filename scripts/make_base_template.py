@@ -4,7 +4,7 @@ from pptx import Presentation
 
 # Source: official SFNL branded template (28 slides; boilerplate starts at slide 20)
 SRC = "SFNL template offerte.pptx"
-DST = "skills/pptx-offerte/assets/sfnl_base.pptx"
+DST = "skills/pptx_offerte/assets/sfnl_base.pptx"
 
 # Number of content slides to strip (slides 1-19); only boilerplate (20-28) is kept
 STRIP_COUNT = 19

@@ -63,8 +63,30 @@ def extract_slides(pptx_path: str):
 
 # ─── Budget checks ────────────────────────────────────────────────────────────
 
-def check_budget(cfg: dict) -> list:
+def check_budget(cfg) -> list:
     issues = []
+
+    if isinstance(cfg, list):
+        budget_entry = next((entry for entry in cfg if entry.get("type") == "budget_table"), None)
+        if budget_entry is None:
+            return issues
+
+        rows = budget_entry.get("content", {}).get("rows", [])
+        total_row = None
+        subtotal = 0
+        for row in rows:
+            fase = str(row.get("fase", "")).lower()
+            kosten = row.get("kosten")
+            if not isinstance(kosten, (int, float)):
+                continue
+            if "totaal" in fase:
+                total_row = kosten
+            else:
+                subtotal += kosten
+        if total_row is not None and abs(subtotal - total_row) > 1:
+            issues.append(f"Totaalrij ({total_row}) ≠ som van niet-totaalrijen ({subtotal})")
+        return issues
+
     b = cfg.get("begroting", {})
     rows = b.get("rows", [])
 
