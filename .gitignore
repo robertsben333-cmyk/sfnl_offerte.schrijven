@@ -1,6 +1,9 @@
 # Generated proposals — per-client output, not source
 output/
 
+# Git worktrees
+.worktrees/
+
 # Python cache
 __pycache__/
 *.pyc
