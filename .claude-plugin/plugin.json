@@ -1,10 +1,8 @@
 {
   "name": "sfnl-offerte",
-  "version": "2.1.1",
-  "description": "Schrijft SFNL offertes voor maatschappelijke businesscases en duurzame financiering",
+  "version": "3.0.0",
+  "description": "SFNL offerte-generator voor alle proposities — MBC, Impact Meten, Advies Innovatieve Financiering, Intermediair, Fondsmanagement, Partnerschappen",
   "author": {
     "name": "Social Finance NL"
-  },
-  "repository": "https://github.com/robertsben333-cmyk/sfnl_offerte.schrijven",
-  "keywords": ["sfnl", "offerte", "businesscase", "impact", "financiering"]
+  }
 }
