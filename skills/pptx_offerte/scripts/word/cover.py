@@ -24,6 +24,9 @@ def add_section(doc: Document, content: dict) -> None:
 
     p_title = doc.add_heading(content.get("title", ""), level=1)
     p_title.alignment = WD_ALIGN_PARAGRAPH.LEFT
+    # proposition accent color is not applied in Word (no accent bar equivalent)
+    if p_title.runs:
+        p_title.runs[0].font.name = STYLE["fonts"]["heading"]
 
     p_label = doc.add_paragraph("OFFERTE")
     if p_label.runs:
