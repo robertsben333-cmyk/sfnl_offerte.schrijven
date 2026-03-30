@@ -433,6 +433,59 @@ These rules apply to ALL text you write for the proposals:
 
 ---
 
+## SFNL Positionering & Onderscheidend Vermogen
+
+Deze sectie informeert hoe je de offertetekst schrijft. Verwerk de onderscheidende punten **subtiel** — niet als marketingclaims, maar als vanzelfsprekende aannames in hoe je het werk omschrijft. Bij grotere of formalere opdrachtgevers (ministeries, grote zorgstelsels, financiële instellingen, VNG/publieke koepels) weeg je deze punten zwaarder mee.
+
+### Kerndifferentiatoren van SFNL
+
+**1. Van impactmeting naar financierbaar model**
+Dit is de scherpste onderscheider t.o.v. vrijwel alle concurrenten (Impact Institute, Ecorys, AEF, Grant Thornton Impact House). Die partijen meten, waarderen of rapporteren impact — maar stoppen voor de stap naar uitvoerbaar bekostigingsmodel en contractontwerp. SFNL maakt die stap structureel.
+→ Verwerk dit door: altijd te framen dat de MBC niet eindigt in een rapport, maar in een *financierbaar en uitvoerbaar* model. Gebruik termen als "financierbaar model", "aantoonbare maatschappelijke waarde die stuurt op bekostiging", "van inzicht naar structurele financiering".
+
+**2. Specialisme in outcome-contracten en preventieve financiering**
+Geen enkel concurrerend bureau heeft dit als kernpropositie. KplusV, Rebelgroup en BMC werken in dit veld, maar missen de specifieke methodische diepgang in resultaatfinanciering en SROI-gedreven contractontwerp.
+→ Verwerk dit door: in fase 3 altijd te spreken over concrete vervolgstappen richting resultaatgerichte samenwerking of innovatieve bekostiging — niet alleen "stakeholders informeren". Noem specifiek welk type financieringsconstructie realistisch is voor deze casus.
+
+**3. Onafhankelijkheid en missie-alignement**
+SFNL is geen deelpraktijk van een groot bureau (zoals Impact House van Grant Thornton) en heeft geen eigen investeringsbelangen (zoals Rebel). SFNL's enige belang is dat de businesscase klopt en de financiering structureel wordt.
+→ Verwerk dit door: in de aanleiding of behoefte-tekst de onafhankelijke positie van SFNL impliciet te maken via woorden als "onafhankelijk advies", "geen belang bij een bepaalde uitkomst" of "transparante methodiek". Niet expliciet claimen, maar als vanzelfsprekend framen.
+
+**4. Het complete traject — van verandertheorie tot financieringsstrategie**
+Concurrenten dekken deeltrajecten: Impact Institute meet, Alexander Impact communiceert, AEF evalueert, KplusV bouwt ecosystemen. SFNL is de enige die verandertheorie → MBC → financieringsadvies → stakeholdercommunicatie in één geïntegreerd traject aanbiedt.
+→ Verwerk dit door: in de phase-overzichttekst (slide 6) te benadrukken dat de drie fases op elkaar voortbouwen en samen één samenhangend geheel vormen. Vermijd het presenteren van de fases als losstaande producten.
+
+**5. Methodische stevigheid + praktische uitvoering**
+SFNL combineert academische rigour (verandertheorie, SROI-methodiek, financieel modelleren) met hands-on begeleiding van de opdrachtgever door het traject. Dit onderscheidt SFNL van puur onderzoekende partijen (Ecorys, AEF) én van puur uitvoerende partijen zonder methodische basis.
+→ Verwerk dit door: concrete methodische begrippen te noemen (verandertheorie, effectenkaart, financiële waardering) zonder ze uit te leggen alsof de lezer ze niet kent. Behandel methodische stevigheid als een gegeven, niet als een verkoopargument.
+
+---
+
+### Toepassing per tekstblok in de offerte
+
+| Tekstblok | Hoe differentiators verwerken |
+|---|---|
+| **Maatschappelijk vraagstuk** | Frame het probleem niet alleen als "geen zicht op impact" maar als "ontbrekend financieringsmodel" of "maatschappelijke waarde niet aantoonbaar voor bekostiger". Dit positioneert de vraag als structureel financieringsvraagstuk, niet als meetvraag. |
+| **Grootste uitdagingen** | Noem altijd de barrière dat maatschappelijke waarde wél gecreëerd wordt, maar niet structureel bekostigd — dit is SFNL's kerngebied, en de precieze reden waarom een MBC nodig is. |
+| **Behoefte van de klant** | Schrijf altijd in termen van *wat de klant wil bereiken na de MBC* (nieuwe financier, resultaatcontract, intern draagvlak voor structurele bekostiging) — niet alleen wat ze willen weten. |
+| **Fase 1 (Impactnarratief)** | Benadruk dat de verandertheorie en outcomes worden gekozen met het oog op financierbaarheid — niet alleen volledigheid. Bv: "We selecteren outcomes op maatschappelijke relevantie én financierbaarheid." |
+| **Fase 3 (Financiering & communicatie)** | Concretiseer altijd: welk type financieringsconstructie is realistisch? Noem het — resultaatcontract, preventieakkoord, meerjarige subsidie, werkgeversbijdrage. Vaagheid hier ondermijnt het onderscheidend vermogen. |
+| **Deliverables per fase** | Altijd actiegerichte deliverables, niet alleen rapporten. Bv: "Geprioriteerde stakeholderlijst met aanbevolen aanpak per stakeholder" i.p.v. "Stakeholderanalyse". |
+
+---
+
+### Extra aandachtspunten voor formele/grote opdrachtgevers
+
+Bij opdrachten voor ministeries, VNG, grote zorgverzekeraars, UMC's, pensioenfondsen of andere formele instituties:
+
+- **Methodologische verantwoording**: Noem expliciet dat de MBC-methodiek gebaseerd is op internationaal erkende SROI-standaarden. Dit is voor formele instellingen een drempelverlagend gegeven, niet een extra verkoopargument.
+- **Onafhankelijkheid benadrukken**: Formele instellingen zijn gevoelig voor belangenverstrengeling. Framing als "onafhankelijke analyse" of "transparante, reproduceerbare methodiek" weegt zwaarder dan bij kleinere opdrachtgevers.
+- **Bestuurlijke herkenbaarheid**: Gebruik taal die aansluit bij de interne taal van de instelling (bij overheid: "beleidsmatig verankeren", "verantwoord bekostigen"; bij zorg: "doelmatigheid", "kwaliteitsverbetering"; bij financiële instellingen: "risicoprofiel", "rendementslogica").
+- **Noem geen concurrenten**: Positioneer SFNL's aanpak altijd inhoudelijk, nooit als "beter dan X". De differentiatie moet uit de inhoud spreken, niet uit vergelijkingen.
+- **Conservatief taalgebruik**: Bij formele instellingen geldt: minder superlatief, meer feitelijk. Zeg "bewezen methodiek" alleen als je kunt verwijzen naar een vergelijkbaar project. Gebruik anders "gestructureerde methodiek" of "stapsgewijze aanpak".
+
+---
+
 ## Historical reference benchmarks
 
 | Project          | Fases | Outcomes | Totaal dagen | Budget (excl. BTW) | Tarief/dag |
