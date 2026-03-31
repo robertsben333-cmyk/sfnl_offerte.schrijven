@@ -94,3 +94,54 @@ def test_fase_detail_labels_are_bold():
         "Deliverable": True,
         "Duur": True,
     }
+
+
+def test_fase_detail_accepts_dotted_substep_number():
+    """Substep slides use dotted numbers like '1.1' — title must render as '1.1. Naam'."""
+    from skills.pptx_offerte.scripts.slides.fase_detail import add_slide
+    prs = Presentation(BASE)
+    content = {
+        "number": "1.1",
+        "naam": "VERANDERTHEORIE EN EFFECTENKAART",
+        "subtitle": "FASE 1: IMPACTNARRATIEF",
+        "klant": "Testklant",
+        "doel": "Verandertheorie en effectenkaart opstellen.",
+        "aanpak": "Kick-off, stakeholderinterviews en werksessie.",
+        "acties_sfnl": ["Verandertheorie opstellen", "Effectenkaart bouwen"],
+        "acties_klant": ["Deelnemen aan werksessie"],
+        "deliverable": "Validated effectenkaart",
+        "dagen": 4,
+        "tijdlijn": "jan 2026",
+        "proposition": "mbc",
+    }
+    add_slide(prs, content)
+    slide = prs.slides[-1]
+    text = " ".join(s.text_frame.text for s in slide.shapes if s.has_text_frame)
+    assert "1.1" in text
+    assert "VERANDERTHEORIE EN EFFECTENKAART" in text
+    assert "FASE 1: IMPACTNARRATIEF" in text
+
+
+def test_fase_detail_substep_subtitle_overrides_default():
+    """When subtitle is provided, it replaces the default 'AANPAK FASE X' label."""
+    from skills.pptx_offerte.scripts.slides.fase_detail import add_slide
+    prs = Presentation(BASE)
+    content = {
+        "number": "2.2",
+        "naam": "BUSINESSCASE OPSTELLEN EN VALIDEREN",
+        "subtitle": "FASE 2: MAATSCHAPPELIJKE BUSINESSCASE",
+        "klant": "Testklant",
+        "doel": "Businesscase opstellen.",
+        "aanpak": "Data waarderen en rapport schrijven.",
+        "acties_sfnl": ["Financiële waardering"],
+        "acties_klant": ["Reviewronde rapport"],
+        "deliverable": "Definitieve businesscase",
+        "dagen": 9,
+        "tijdlijn": "apr–mei 2026",
+        "proposition": "mbc",
+    }
+    add_slide(prs, content)
+    slide = prs.slides[-1]
+    text = " ".join(s.text_frame.text for s in slide.shapes if s.has_text_frame)
+    assert "FASE 2: MAATSCHAPPELIJKE BUSINESSCASE" in text
+    assert "AANPAK FASE 2.2" not in text
