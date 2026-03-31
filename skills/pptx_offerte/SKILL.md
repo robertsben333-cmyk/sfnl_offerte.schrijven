@@ -45,6 +45,8 @@ Default deckvolgorde voor offertes:
 
 `cover → aanleiding → aanpak_overview → fase_detail × n → tijdslijn → randvoorwaarden → budget_table → akkoord`
 
+When a fase has substeps, `fase_detail × n` expands to one `fase_detail` per substep (e.g. `fase_detail` "2.1" + `fase_detail` "2.2" instead of one `fase_detail` "2"). All substep slides share the same deck-wide typography scale.
+
 Gebruik `section_header` alleen waar het deck daar echt sterker van wordt. Gebruik `team` alleen als de teamsamenstelling commercieel iets toevoegt.
 
 ## Supported Word section types
@@ -115,7 +117,7 @@ Check every generated deck slide-by-slide:
 - `cover`: title must stay in the orange field; client/date metadata must sit cleanly in the pink block without overlapping `OFFERTE`
 - `aanleiding`: panel headings stay centered and white; body text sits inside the coloured panels, not on top of them or above them
 - `aanpak_overview`: max 4 overview chevrons in the template variant; per phase use full explanatory sentences and keep the slide around the density of the example offers
-- `fase_detail`: left column is compact operational info; right column carries the substantive explanation; labels are bold; all phase slides share one body-size scale
+- `fase_detail`: left column is compact operational info; right column carries the substantive explanation; labels are bold; all phase slides (including substep slides) share one body-size scale. Substep slides use dotted numbers (`"2.1"`) and set `subtitle` to the parent fase name for context.
 - `tijdslijn`: keep month labels short, use the existing template table/fills instead of rebuilding the slide, and fill the detail rows with concrete betweenstappen where possible
 - `randvoorwaarden`: prefer 3-4 strong bullets; if more is needed, move nuance to another slide or the akkoordtekst
 - `budget_table`: keep the note block short enough to preserve whitespace below the table and explicitly style table text in SFNL body typography
