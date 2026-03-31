@@ -1,6 +1,9 @@
 # Generated proposals — per-client output, not source
 output/
 
+# Large local reference decks and documents
+Offerte voorbeelden/
+
 # Git worktrees
 .worktrees/
 
