@@ -102,3 +102,9 @@ randvoorwaarden → akkoord
 3. **Koppel de tijdslijn aan bestuurlijke momenten.** Bestuursvergaderingen of besluitmomenten sturen vaak de planning.
 4. **Praatplaten en interviewrondes zijn volwaardige deliverables.** Benoem die expliciet.
 5. **Maak implementatie en beheer een aparte keuze.** Laat helder zien wat in ontwerp zit en wat pas later volgt.
+6. **Werk werkstroomcopy rijk uit.** Of je nu `aanpak_overview` of werkstroomnamen gebruikt: benoem per blok doel, ontwerpwerk, afstemming, besluitmoment en opbrengst. Vermijd korte containerteksten.
+7. **Gebruik de detailslides voor echte toelichting.** De rechterkolom moet uitleggen hoe governance, processen, financieringslogica en uitvoerbaarheid worden ontworpen, getest of afgestemd.
+8. **Houd de linkerkolom secundair maar concreet.** Compacte acties, deliverables, duur en tijdlijn zijn nodig om de werkstroom geloofwaardig te maken; wees hier niet zuiniger dan nodig.
+9. **Neem `copy_reference` op in de config.** Gebruik de ranges uit `skills/pptx_offerte/references/copy_length_reference.md`, ook als je de blokken semantisch als werkstromen framen wilt.
+10. **Maak planning bestuurlijk leesbaar.** Gebruik in `tijdslijn` echte tussenstappen zoals interviewronde, praatplaat, governancebesluit, fondsmodel en validatiemoment.
+11. **Tariefkeuze en begrotingslogica vooraf expliciteren.** Bepaal volledig of sociaal tarief in de intake en controleer daarna streng of tarieftekst en rekentabel exact gelijk lopen.

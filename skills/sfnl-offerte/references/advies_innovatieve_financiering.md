@@ -108,3 +108,9 @@ tijdslijn → team → budget_table → randvoorwaarden → akkoord
 3. **Maak het verschil met IIF scherp.** AIF eindigt meestal bij een voorkeursroute en een stappenplan; IIF gaat verder richting deal, contracten of outcome fund.
 4. **Houd de deliverables kort en bestuurlijk bruikbaar.** Een besluitmemo, praatplaat of shortlist werkt vaak beter dan een zwaar rapport.
 5. **Plan een expliciet go/no-go-moment** als de klant eerst wil verkennen voordat een diepere feasibility start.
+6. **Werk fasecopy inhoudelijk uit.** `aanpak_overview` moet per fase duidelijk maken welke verkenning, vergelijking of haalbaarheidstoets plaatsvindt en waarom die stap nodig is om tot een voorkeursroute te komen.
+7. **Gebruik `fase_detail` adviserend.** De rechterkolom moet toelichten hoe we routes vergelijken, welke criteria we hanteren, welke stakeholders we spreken en hoe een route uiteindelijk bestuurlijk besluitrijp wordt gemaakt.
+8. **Linkerkolom compact maar bruikbaar houden.** Benoem acties, klantinbreng, deliverables, duur en tijdlijn zo concreet dat het traject uitvoerbaar voelt, zonder de hele inhoud naar links te trekken.
+9. **Neem `copy_reference` op in de config.** Gebruik de ranges uit `skills/pptx_offerte/references/copy_length_reference.md` zodat overview- en detailslides niet te mager worden.
+10. **Geef de planning echte tussenstappen.** Bijvoorbeeld deskresearch, stakeholdertoets, afwegingssessie, routekeuze en besluitvorming, in plaats van alleen fasekoppen.
+11. **Tariefkeuze in de intake houden.** Kies vooraf volledig of sociaal tarief en laat op de begroting alleen de gekozen variant zien.

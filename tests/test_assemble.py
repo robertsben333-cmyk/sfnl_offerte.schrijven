@@ -94,3 +94,42 @@ def test_assemble_accepts_plan_b_slide_types(tmp_path):
     assemble(slide_plan, output, base=BASE_PPTX)
     prs = Presentation(output)
     assert len(prs.slides) == len(slide_plan)
+
+
+def test_derive_style_context_scales_fase_detail_consistently():
+    """Dense fase_detail slides should share one compact typography scale."""
+    from skills.pptx_offerte.scripts.assemble import _derive_style_context
+
+    slide_plan = [
+        {"type": "fase_detail", "content": {
+            "doel": "Kort doel.",
+            "aanpak": "Korte aanpak.",
+            "acties_sfnl": ["Een actie"],
+            "acties_klant": ["Een klantactie"],
+            "deliverable": "Kort deliverable",
+            "dagen": 2,
+            "tijdlijn": "mei 2026",
+        }},
+        {"type": "fase_detail", "content": {
+            "doel": "Dit is een veel langere doeltekst die expliciet bedoeld is om een compactere typografische schaal af te dwingen voor alle fase detail slides in dezelfde deck.",
+            "aanpak": "Ook de aanpaktekst is hier duidelijk langer en beschrijft meerdere onderdelen van de werkwijze zodat de assembler niet per slide ad hoc schaalt maar voor alle fase detail slides dezelfde body sizes kiest.",
+            "acties_sfnl": [
+                "Actie een met uitleg",
+                "Actie twee met uitleg",
+                "Actie drie met uitleg",
+            ],
+            "acties_klant": [
+                "Klantactie een met uitleg",
+                "Klantactie twee met uitleg",
+                "Klantactie drie met uitleg",
+            ],
+            "deliverable": "Een langer deliverable met toelichting",
+            "dagen": 8,
+            "tijdlijn": "juni-juli 2026",
+        }},
+    ]
+
+    context = _derive_style_context(slide_plan)
+    fase_style = context["fase_detail"]
+    assert fase_style["right_body_size"] <= 13
+    assert fase_style["left_body_size"] <= 10

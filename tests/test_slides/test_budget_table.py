@@ -53,3 +53,17 @@ def test_budget_table_contains_tarief_note_and_disclaimer():
     text = " ".join(s.text_frame.text for s in prs.slides[-1].shapes if s.has_text_frame)
     assert "gereduceerd tarief" in text
     assert "niet geldig voor vervolgopdrachten" in text
+
+
+def test_budget_table_uses_sfnl_body_font():
+    from skills.pptx_offerte.scripts.slides.budget_table import add_slide
+
+    prs = Presentation(BASE)
+    add_slide(prs, CONTENT)
+    slide = prs.slides[-1]
+    table = next(s for s in slide.shapes if s.has_table).table
+
+    header_run = table.cell(0, 1).text_frame.paragraphs[0].runs[0]
+    body_run = table.cell(1, 0).text_frame.paragraphs[0].runs[0]
+    assert header_run.font.name == "Lato Light"
+    assert body_run.font.name == "Lato Light"

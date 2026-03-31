@@ -1,69 +1,46 @@
-"""PPTX akkoord slide — randvoorwaarden text + two signing boxes."""
+"""PPTX akkoord slide — fill the existing template text boxes and placeholders."""
 from pptx import Presentation
 from skills.pptx_offerte.scripts.slides._utils import (
-    ACCENT_MAP,
+    clear_run_highlights,
     clone_template_slide,
     find_placeholder,
     find_shape,
-    hex_color as _hex,
     set_paragraphs,
+    set_lines_preserve,
+    set_text_preserve,
 )
 
 
 def add_slide(prs: Presentation, content: dict) -> None:
     """
-    content: title, randvoorwaarden_tekst, termijnen (list[str]),
-             sfnl_naam, klant_naam, klant_org, proposition
+    content: title, subtitle, randvoorwaarden_tekst, termijnen (list[str]),
+             sfnl_naam, klant_naam, klant_org
     """
-    slide = clone_template_slide(prs, "akkoord")
+    target_idx = content.get("__target_slide_index__")
+    slide = prs.slides[target_idx] if target_idx is not None else clone_template_slide(prs, "akkoord")
+    style = content.get("__style_context__", {}).get("akkoord", {})
 
-    proposition = content.get("proposition", "mbc")
-    accent = _hex(ACCENT_MAP.get(proposition, "accent_mbc"))
-    primary = _hex("primary")
-    muted = _hex("text_muted")
-
-    set_paragraphs(
-        find_placeholder(slide, 0),
-        [{
-            "text": content.get("title", "RANDVOORWAARDEN EN AKKOORD"),
-            "role": "heading",
-            "size": 20,
-            "bold": True,
-            "color": accent,
-        }],
-    )
+    set_text_preserve(find_placeholder(slide, 0), content.get("title", "RANDVOORWAARDEN EN AKKOORD"))
     if content.get("subtitle"):
-        set_paragraphs(
-            find_placeholder(slide, 1),
-            [{
-                "text": content["subtitle"],
-                "role": "subtitle",
-                "size": 11,
-                "color": primary,
-            }],
-        )
+        set_text_preserve(find_placeholder(slide, 1), content["subtitle"])
 
-    body = [
-        {"text": "Randvoorwaarden", "role": "body", "size": 10, "bold": True, "color": primary},
-        {"text": content.get("randvoorwaarden_tekst", ""), "role": "body", "size": 10, "color": primary},
+    body_lines = [
+        {"text": "Randvoorwaarden", "role": "body", "size": style.get("body_size", 12)},
+        {"text": content.get("randvoorwaarden_tekst", ""), "role": "body", "size": style.get("body_size", 12)},
     ]
-    body.extend(
-        {"text": f"• {termijn}", "role": "body", "size": 9, "color": muted}
-        for termijn in content.get("termijnen", [])
+    body_lines.extend(
+        {"text": termijn, "role": "body", "size": style.get("body_size", 12)}
+        for termijn in content.get("termijnen", [])[:3]
     )
-    set_paragraphs(find_placeholder(slide, 10), body)
+    set_paragraphs(find_placeholder(slide, 10), body_lines)
 
-    set_paragraphs(
+    set_lines_preserve(
         find_shape(slide, "TextBox 9"),
-        [
-            {"text": content.get("sfnl_naam", ""), "role": "body", "size": 10, "bold": True, "color": primary},
-            {"text": "Social Finance NL", "role": "body", "size": 10, "color": muted},
-        ],
+        ["", content.get("sfnl_naam", ""), "Social Finance NL"],
     )
-    set_paragraphs(
-        find_shape(slide, "TextBox 8", 0),
-        [
-            {"text": content.get("klant_naam", ""), "role": "body", "size": 10, "bold": True, "color": primary},
-            {"text": content.get("klant_org", ""), "role": "body", "size": 10, "color": muted},
-        ],
+    klant_box = find_shape(slide, "TextBox 8", 0)
+    set_lines_preserve(
+        klant_box,
+        ["", content.get("klant_naam", ""), content.get("klant_org", "")],
     )
+    clear_run_highlights(klant_box)

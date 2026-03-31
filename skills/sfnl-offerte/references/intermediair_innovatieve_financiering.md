@@ -104,3 +104,9 @@ randvoorwaarden → akkoord
 3. **Splits ontwerp en uitvoering.** Een performance-managementfase mag groot zijn; zet die vaak bewust als vervolg neer.
 4. **Werk deliverables mechanisch uit.** Bijvoorbeeld rate card, term sheet, governancevoorstel, samenwerkingsovereenkomst, SPV-opzet.
 5. **Gebruik randvoorwaarden streng.** Snelle toegang tot data, budgethouders en besluitvormers is hier bepalend voor haalbaarheid.
+6. **Maak overview- en detailslides inhoudelijk zwaar genoeg.** Bij IIF moet het deck laten zien dat we niet alleen adviseren, maar ook deal- en governancelogica kunnen uitwerken. Schrijf per fase liever rijk en concreet dan kort en abstract.
+7. **Gebruik `fase_detail` voor de mechaniek van de constructie.** Leg in de rechterkolom uit hoe outcomes, rate card, governance, stakeholdercommitments en implementatievoorbereiding logisch op elkaar aansluiten.
+8. **Laat de linkerkolom operationeel zijn, maar niet leeg.** Benoem compacte acties per partij, deliverables, duur en tijdlijn zó dat ook duidelijk wordt welke afhankelijkheden er zijn.
+9. **Gebruik `copy_reference` in de config.** Neem referentieranges op uit `skills/pptx_offerte/references/copy_length_reference.md`, zeker voor overview, detail, planning en begroting.
+10. **Geef de planning echte werkblokken.** Bijvoorbeeld outcome-validatie, rate-card ontwerp, governance-afstemming, term-sheet uitwerking en besluitvorming, in plaats van alleen generieke fasen.
+11. **Tariefkeuze vooraf vastzetten.** Volledig of sociaal tarief wordt in de intake gekozen; op de begrotingsslide staat alleen de gekozen variant.

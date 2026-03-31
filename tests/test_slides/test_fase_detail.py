@@ -65,3 +65,32 @@ def test_fase_detail_contains_deliverable_and_days():
     text = _all_text(prs.slides[-1])
     assert "Rapport en presentatie" in text
     assert "8" in text
+
+
+def test_fase_detail_labels_are_bold():
+    from skills.pptx_offerte.scripts.slides.fase_detail import add_slide
+
+    prs = Presentation(BASE)
+    add_slide(prs, CONTENT)
+    slide = prs.slides[-1]
+    right_box = next(ph for ph in slide.placeholders if ph.placeholder_format.idx == 11)
+    left_box = next(ph for ph in slide.placeholders if ph.placeholder_format.idx == 12)
+
+    right_labels = {
+        paragraph.text.strip(): paragraph.runs[0].font.bold
+        for paragraph in right_box.text_frame.paragraphs
+        if paragraph.text.strip() in {"Doel", "Aanpak"}
+    }
+    left_labels = {
+        paragraph.text.strip(): paragraph.runs[0].font.bold
+        for paragraph in left_box.text_frame.paragraphs
+        if paragraph.text.strip() in {"Acties Social Finance NL", "Acties TESTKLANT", "Deliverable", "Duur"}
+    }
+
+    assert right_labels == {"Doel": True, "Aanpak": True}
+    assert left_labels == {
+        "Acties Social Finance NL": True,
+        "Acties TESTKLANT": True,
+        "Deliverable": True,
+        "Duur": True,
+    }

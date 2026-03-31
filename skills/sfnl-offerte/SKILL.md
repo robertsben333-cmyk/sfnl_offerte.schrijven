@@ -82,6 +82,12 @@ Gebruik het gekozen profiel voor format, fases, werkstromen en benchmarks.
 - Vermeld altijd dat het om een teamtarief gaat.
 - Haal de keuze tussen `volledig tarief` en `sociaal tarief` op in de intake, niet op de begrotingsslide.
 - Toon in de begroting alleen het gekozen tarief. Voeg bij sociaal tarief wel de gereduceerd-tariefmotivatie en disclaimer toe.
+- Werk de **fasecopy inhoudelijk uit** voordat je gaat genereren:
+  - `aanpak_overview`: schrijf per fase liever 2-4 volledige zinnen dan een te korte samenvatting; benoem doel, kernwerkzaamheden, beoogd resultaat en waar relevant ook het besluit- of leermoment van die fase
+  - `fase_detail`: rechterkolom moet inhoudelijk rijk en adviserend zijn; leg per fase uit waarom de fase nodig is, hoe we concreet werken, welke analyses, sessies of ontwerpstappen we doorlopen, wat daarin wordt besloten of geleerd, en hoe dit aansluit op vervolgfasen
+  - voorkom dat `fase_detail` te veel als samenvatting voelt; geef liever meer toelichting op de inhoudelijke werkwijze dan dat je de tekst te hard comprimeert
+  - linker kolom van `fase_detail` blijft compacter dan de rechterkolom, maar hoeft niet minimalistisch te zijn: meestal 2-4 acties per partij, 1 duidelijke deliverable of kleine deliverable-set, plus duur en tijdlijn
+  - als de tekst nog goed past in de template, kies dan voor meer uitleg boven bondigheid
 
 Bij korting of NGO-tarief: schrijf ook een korte motivatieparagraaf die standaardtarief en gereduceerd tarief naast elkaar zet.
 
@@ -105,6 +111,7 @@ Vraag daarna:
 Na bevestiging:
 
 - schrijf een config JSON in `output/`;
+- lees `skills/pptx_offerte/references/copy_length_reference.md` en neem per relevante slide een `copy_reference` blok op in de config;
 - gebruik de PPTX-workflow die al in deze repo zit;
 - bouw PowerPoint-offertes in deze volgorde tenzij er een inhoudelijke reden is om af te wijken:
   `cover → aanleiding → fase-overzicht → per fase één detailslide → planning → randvoorwaarden voor succes → budget → akkoord`;
@@ -119,6 +126,11 @@ Controleer altijd:
 - placeholders of template-tekst
 - toon, concreetheid en actieve formulering
 - of de faselogica en deliverables specifiek genoeg zijn
+- of de slidecopy inhoudelijk rijk genoeg is, vooral op `aanpak_overview` en `fase_detail`
+- of de fasecopy niet te veel is samengedrukt; een slide mag liever degelijk uitgelegd zijn dan sloganmatig kort
+- of de config-referenties voor copylengte logisch zijn ingevuld en aansluiten op de SFNL-voorbeelden
+- of de rechterkolom van `fase_detail` substantie bevat en de linkerkolom alleen compacte operationele informatie
+- of de hoeveelheid tekst per slide nog past bij de templatehiërarchie
 
 Gebruik waar passend de bestaande reviewscript(s) in deze repo.
 

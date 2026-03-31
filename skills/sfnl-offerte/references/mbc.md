@@ -114,3 +114,9 @@ Altijd één van deze formuleringen opnemen:
 3. **Fase 3: concretiseer het financieringstype.** Noem welk mechanisme realistisch is (resultaatcontract, preventieakkoord, werkgeversbijdrage, meerjarige subsidie). Vaagheid hier ondermijnt de offerte.
 4. **Deliverables actiegericht formuleren:** "Geprioriteerde stakeholderlijst met aanpak per stakeholder" ipv "Stakeholderanalyse".
 5. **Go/no-go-moment** tussen fase 1 en 2 kan worden opgenomen als dit past bij de klantbehoefte.
+6. **Werk fasecopy rijk uit.** Gebruik op `aanpak_overview` liever 2-4 zinnen per fase dan één slogan. Benoem doel, kernanalyse, belangrijkste besluitpunt en wat de fase oplevert voor de volgende stap.
+7. **Gebruik `fase_detail` voor echte inhoud.** De rechterkolom moet uitleggen hoe we werken: welke analyses, sessies, validaties en afwegingen we doen en waarom die nodig zijn voor een financieringswaardige businesscase.
+8. **Houd de linkerkolom secundair, niet karig.** Neem compacte acties, deliverables, duur en tijdlijn op, maar wees niet bang voor 3-4 acties als dat nodig is om de aanpak geloofwaardig te maken.
+9. **Gebruik `copy_reference` in de config.** Neem per overview-, detail-, planning- en begrotingsslide de relevante referentierange op uit `skills/pptx_offerte/references/copy_length_reference.md`.
+10. **Maak de planning concreet.** Gebruik in `tijdslijn` niet alleen fasebalken, maar ook tussenstappen zoals dataverzameling, waardering, validatie en stakeholdergesprekken.
+11. **Tariefkeuze vooraf bepalen.** Kies in de intake tussen volledig en sociaal tarief; toon op de begrotingsslide alleen het gekozen tarief en voeg bij sociaal tarief een motivatie en disclaimer toe.

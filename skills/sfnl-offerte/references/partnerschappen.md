@@ -80,3 +80,9 @@
 3. **Voeg PR of ondertekening alleen toe als echte keuze.** Niet standaard meepakken.
 4. **Let op consortiumlogica.** Bij co-delivery kunnen partijen apart factureren; zet dat duidelijk in de begroting en het akkoord.
 5. **Houd workshops scherp afgebakend.** Doel, duur, aantal sessies en eventuele voorbereiding moeten in één oogopslag duidelijk zijn.
+6. **Werk fase- of partnerschapscopy inhoudelijk uit.** Ook bij coalities of leertrajecten moet `aanpak_overview` laten zien hoe we samenwerking opbouwen, activeren en borgen; houd het niet bij slogans of alleen proceswoorden.
+7. **Gebruik `fase_detail` of equivalente detailblokken voor de echte werkwijze.** Licht toe hoe we partners selecteren, sessies voorbereiden, gezamenlijke keuzes structureren en toewerken naar commitments, modules of convenanten.
+8. **Linkerkolom mag compact zijn, maar niet leeg.** Benoem acties per partij, deliverables, duur en tijdlijn concreet genoeg om het traject uitvoerbaar en professioneel te laten voelen.
+9. **Gebruik `copy_reference` in de config.** Gebruik de ranges uit `skills/pptx_offerte/references/copy_length_reference.md`; alleen bij een enkelvoudige workshop mag de copy duidelijk compacter zijn.
+10. **Maak de planning voelbaar.** Voeg echte tussenstappen toe zoals intake, partnermapping, werksessie, terugkoppeling, commitmentronde of oplevermoment.
+11. **Tariefkeuze vooraf vastleggen.** Volledig of sociaal tarief wordt in de intake bepaald; de begroting laat vervolgens alleen de gekozen variant zien.

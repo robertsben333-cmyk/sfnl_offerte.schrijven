@@ -41,3 +41,27 @@ def test_tijdslijn_contains_phase_names_and_periods():
     assert "Fase 1" in text
     assert "jan\u2013mrt" in text
     assert "Fase 2" in text
+
+
+def test_tijdslijn_contains_substeps_when_provided():
+    from skills.pptx_offerte.scripts.slides.tijdslijn import add_slide
+
+    prs = Presentation(BASE)
+    content = {
+        "title": "TIJDSLIJN",
+        "intro": "Indicatieve planning.",
+        "display_phases": [
+            {"naam": "Fase 1", "dagen": 3, "substeps": ["Kick-off", "Interviews"]},
+            {"naam": "Fase 2", "dagen": 4, "substeps": ["Analyse", "Validatie"]},
+        ],
+        "phases": [
+            {"naam": "Fase 1", "periode": "jan\u2013mrt", "activiteiten": "Kickoff en deskresearch"},
+            {"naam": "Fase 2", "periode": "apr\u2013jun", "activiteiten": "Analyse en modellering"},
+        ],
+        "disclaimer": "Planning is indicatief.",
+        "proposition": "mbc",
+    }
+    add_slide(prs, content)
+    text = _all_text(prs.slides[-1])
+    assert "Kick-off" in text
+    assert "Analyse" in text
